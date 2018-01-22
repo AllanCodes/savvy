@@ -1,0 +1,24 @@
+{
+  "name": "savvy",
+  "version": "1.0.0",
+  "description": "Savvy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AllanCodes/savvy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AllanCodes/savvy/issues"
+  },
+  "homepage": "https://github.com/AllanCodes/savvy#readme",
+  "dependencies": {
+    "facebook-events-by-location": "^0.13.0",
+    "facebook-events-by-location-core": "^0.9.1"
+  }
+}

@@ -1,41 +1,93 @@
-<!doctype html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<title>Basic initialization</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Savvy</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <style type="text/css">
+    #contacts p, #contacts p.lead{ margin: 0; }
+    .authenticated{ display: block;margin-top: 20px;margin-bottom: 10px;}
+    .unauthenticated{display: none;}
+    .modal-header:last-child{border-bottom: 0;}
+  </style>
 </head>
-	<script src="/dhtml/codebase/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
-	<link rel="stylesheet" href="/dhtml/codebase/dhtmlxscheduler.css" type="text/css" charset="utf-8">
+<body>
+  <div class="container">
+    <span class="userAuth authenticated pull-right">
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#registerModal">Register</button>
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#loginModal">Login</button>
+    </span>
+    <h1>Savvy: The Next Generation of Calendars</h1>
+    <hr/>
 
-	
-<style type="text/css" >
-	html, body{
-		margin:0px;
-		padding:0px;
-		height:100%;
-		overflow:hidden;
-	}	
-</style>
+  <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="Register" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="registerModalLabel">Register</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">First Name:</label>
+            <input type="text" class="form-control" id="registerFirstName">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">Last Name:</label>
+            <input type="text" class="form-control" id="registerLastName">
+          </div>
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">Email:</label>
+            <input type="text" class="form-control" id="registerEmail">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Password:</label>
+            <input type="password" class="form-control" id="registerPassword">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Confirm Password:</label>
+            <input type="password" class="form-control" id="registerConfirmPassword">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="doRegister">Register</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="loginModalLabel">Login</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="recipient-name" class="control-label">Email:</label>
+            <input type="text" class="form-control" id="loginEmail">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="control-label">Password:</label>
+            <input type="password" class="form-control" id="loginPassword">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="doLogin">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
 
-<script type="text/javascript" charset="utf-8">
-	function init() {
-		scheduler.init('scheduler_here',new Date(2018,0,1),"week");		
-	}
-</script>
-
-<body onload="init();">
-	<div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
-		<div class="dhx_cal_navline">
-			<div class="dhx_cal_prev_button">&nbsp;</div>
-			<div class="dhx_cal_next_button">&nbsp;</div>
-			<div class="dhx_cal_today_button"></div>
-			<div class="dhx_cal_date"></div>
-			<div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
-			<div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
-			<div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
-		</div>
-		<div class="dhx_cal_header">
-		</div>
-		<div class="dhx_cal_data">
-		</div>
-	</div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
+  <script src="script.js"></script>
 </body>
+</html>
