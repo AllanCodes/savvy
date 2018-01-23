@@ -76,6 +76,10 @@ $(document).ready(function(){
     });
   
     //Login
+    $('#loginPassword').keypress(function (e){
+      if(e.keyCode == 13 ) $('#doLogin').click();
+    });
+
     $('#doLogin').on('click', function (e) {
       //$('#formm').submit(function(e) {
       e.preventDefault();
