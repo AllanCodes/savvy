@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<title>Basic initialization</title>
 	<script src="/__/firebase/4.0.0/firebase-app.js"></script>
 	<script src="/__/firebase/4.0.0/firebase-auth.js"></script>
 	<script src="/__/firebase/init.js"></script>
+	<script>
+			firebase.auth().onAuthStateChanged(function(user) {
+			if (user) {
+				console.log(user.email);
+			}
+			else {
+				window.location.href = "index.html"
+				console.log("logged out");
+			}
+		});
+	</script>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 	<script src="/dhtml/codebase/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
 	<link rel="stylesheet" href="/dhtml/codebase/dhtmlxscheduler.css" type="text/css" charset="utf-8">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<title>Savvy - Next Generation Calendar</title>
 </head>
+
 	
 <style type="text/css" >
 	html, body{ margin:0px; padding:0px; height:100%; overflow:hidden;}	
@@ -23,15 +35,6 @@
 	function init() {
 		scheduler.init('scheduler_here',new Date(2018,0,1),"week");		
 	}
-
-	firebase.auth().onAuthStateChanged(function(user) {
-		if (user) {
-			console.log(user.email);
-		}
-		else {
-			console.log("logged out");
-		}
-	});
 
 	function signOut() {
 		var user = firebase.auth().currentUser;

@@ -19,6 +19,15 @@ $(document).ready(function(){
     var usersRef = dbRef.ref('users')
     var auth = null;
   
+
+    $('#loginModal').on('shown.bs.modal', function(e) {
+      $('#loginEmail').focus();
+    });
+
+    $('#registerModal').on('shown.bs.modal', function(e) {
+      $('#registerFirstName').focus();
+    });
+
     //Register
     $('#doRegister').on('click', function (e) {
       e.preventDefault();
@@ -68,6 +77,7 @@ $(document).ready(function(){
   
     //Login
     $('#doLogin').on('click', function (e) {
+      //$('#formm').submit(function(e) {
       e.preventDefault();
       $('#loginModal').modal('hide');
       $('#messageModalLabel').html(spanText('<i class="fa fa-cog fa-spin"></i>', ['center', 'info']));
