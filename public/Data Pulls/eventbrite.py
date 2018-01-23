@@ -30,7 +30,7 @@ class eventBrite():
             return cats
 
 
-    def events(self, city="Irvine", within=30, category=""):
+    def events(self, city="Irvine", within=100, category=""):
         """
         Grab all events in area, within specified radius
         """
@@ -57,11 +57,15 @@ class eventBrite():
     
 
     def writeJson(self, l_, name):
+        """
+        convert list called {l_} to JSON file called {name}
+        """
         with open(name, 'w') as f:
             json.dump(l_, f)
 
 if __name__ == "__main__":
-   pass
-   #p = eventBrite()
-   #p.writeJson(p.categories(), "d.json")
-   #p.writeJson(p.events(), "events.json")
+   #pass
+   p = eventBrite()
+   p.events()
+#    p.writeJson(p.categories(), "d.json")
+#    p.writeJson(p.events(), "events.json")

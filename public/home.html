@@ -1,47 +1,68 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
 	<title>Basic initialization</title>
 	<script src="/__/firebase/4.0.0/firebase-app.js"></script>
 	<script src="/__/firebase/4.0.0/firebase-auth.js"></script>
 	<script src="/__/firebase/init.js"></script>
-</head>
 	<script src="/dhtml/codebase/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
 	<link rel="stylesheet" href="/dhtml/codebase/dhtmlxscheduler.css" type="text/css" charset="utf-8">
-
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
 	
 <style type="text/css" >
-	html, body{
-		margin:0px;
-		padding:0px;
-		height:100%;
-		overflow:hidden;
-	}	
+	html, body{ margin:0px; padding:0px; height:100%; overflow:hidden;}	
+	.menu{ display: block;margin-top: 20px;margin-bottom: 10px;}
 </style>
 
 <script type="text/javascript" charset="utf-8">
 	function init() {
-		scheduler.init('scheduler_here',new Date(2018,0,1),"week");
-		document.getElementById("sign-out").onClick = signOut;
-		
+		scheduler.init('scheduler_here',new Date(2018,0,1),"week");		
 	}
+
+	firebase.auth().onAuthStateChanged(function(user) {
+		if (user) {
+			console.log(user.email);
+		}
+		else {
+			console.log("logged out");
+		}
+	});
+
 	function signOut() {
-		alert("test")
 		var user = firebase.auth().currentUser;
 		if (user != null) {
-			firebase.auth().signOut().then(function() {
-				name = user.displayName;
-				email = user.email;
-				console.log("logged out " + name);
-			}, function(error) {
-				console.log("ERROR: logging out");
+			firebase.auth().signOut().then(function(error) {
+				window.location.href = "index.html";
 			});	
 		}
 	}
 </script>
 
 <body onload="init();">
-	<button type="button" id="sign-out">Sign Out</button>
+	<div>
+		<span class="menu">
+			<button type="button" id="sign-out" class="btn btn-danger pull-left" onclick="signOut();"> Sign Out </button>
+			<button type="button" id="explore" class="btn btn-info pull-right">
+				<span class="glyphicon glyphicon-menu-hamburger"></span> Explore 
+			</button>
+			<div class="col-md-6 text-center">		
+	   			<div class="input-group add-on">
+	      			<input type="text" class="form-control" placeholder="Search" id="search">
+	     			<div class="input-group-btn">
+	        			<button class="btn btn-default" type="submit">
+	        				<span class="glyphicon glyphicon-search"></span>
+	        			</button>
+	      			</div>
+	    		</div>
+	    	</div>
+  		</span>
+	</div>
+
 	<div id="scheduler_here" class="dhx_cal_container" style='width:100%; height:100%;'>
 		<div class="dhx_cal_navline">
 			<div class="dhx_cal_prev_button">&nbsp;</div>
@@ -57,4 +78,6 @@
 		<div class="dhx_cal_data">
 		</div>
 	</div>
+
 </body>
+</html>

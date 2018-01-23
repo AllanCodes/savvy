@@ -9,7 +9,8 @@ $(document).ready(function(){
     	storageBucket: "savvy-aa31e.appspot.com",
     	messagingSenderId: "66499803255"
     };
-    firebase.initializeApp(config);
+    if (!firebase.apps.length)
+      firebase.initializeApp(config);
   
     //create firebase references
     var Auth = firebase.auth(); 
