@@ -2,7 +2,7 @@
 $(document).ready(function(){
     //initialize the firebase app
     var config = {
-        apiKey: "AIzaSyAsPdolj3xYtfiiQ1hL795PoTJRqz9IBg0",
+      apiKey: "AIzaSyAsPdolj3xYtfiiQ1hL795PoTJRqz9IBg0",
     	authDomain: "savvy-aa31e.firebaseapp.com",
 	    databaseURL: "https://savvy-aa31e.firebaseio.com",
     	projectId: "savvy-aa31e",
@@ -79,6 +79,10 @@ $(document).ready(function(){
     $('#loginPassword').keypress(function (e){
       if(e.keyCode == 13 ) $('#doLogin').click();
     });
+
+    $('#loginEmail').keypress(function (e) {
+      if (e.keyCode == 13) $('#doLogin').click();
+    })
 
     $('#doLogin').on('click', function (e) {
       //$('#formm').submit(function(e) {

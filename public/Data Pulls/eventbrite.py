@@ -30,7 +30,7 @@ class eventBrite():
             return cats
 
 
-    def events(self, city="Irvine", within=100, category=""):
+    def events(self, city="Irvine", within="100", category=""):
         """
         Grab all events in area, within specified radius
         """
@@ -40,10 +40,10 @@ class eventBrite():
             events = []
             pages = int(r.json()["pagination"]["page_count"])
             for x in range(pages):
-                print(x)
                 ep = self.base_url + "events/search/" + self.token + "&location.address=" + city + "&page=" + str(x) + "&location.within=" + str(within) + "mi" + "&categories=" + str(category)
                 l_ = r.json()["events"]
                 for event in l_:
+                    print(event["name"]["text"])
                     d_ = {
                         "name": event["name"]["text"],
                         "start_time": event["start"]["local"],
@@ -53,6 +53,7 @@ class eventBrite():
                         "description": event["description"]["text"]                 
                     }
                     events.append(d_)
+
             return events
     
 
