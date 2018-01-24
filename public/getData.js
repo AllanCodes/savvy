@@ -19,13 +19,11 @@ $(document).ready(function() {
         var dbRef = firebase.database();
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
-                console.log(user.uid);
                 firebase.database().ref('users/' + user.uid).once('value').then(function (snapshot) {
-                    console.log(snapshot.val().firstName)
+                    $.notify("Welcome " + snapshot.val().firstName, "success");
                 });
             }
             else {
-                console.log("lout");
             }
         })
 

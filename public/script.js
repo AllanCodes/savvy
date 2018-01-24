@@ -54,8 +54,6 @@ $(document).ready(function(){
             .createUserWithEmailAndPassword(data.email, passwords.password)
             .then(function(user){
               //now user is needed to be logged in to save data
-              //console.log("Authenticated successfully:", user);
-              //auth = user;
               usersRef.child(user.uid).set(data).then(function () {
                 console.log("Successfully created user account with uid:", user.uid);
                 window.location.href = "home.html";
@@ -85,7 +83,7 @@ $(document).ready(function(){
 
     $('#doLogin').on('click', function (e) {
       e.preventDefault();
-      $('#loginModal').modal('hide');
+      //$('#loginModal').modal('hide');
       $('#messageModalLabel').html(spanText('<i class="fa fa-cog fa-spin"></i>', ['center', 'info']));
       $('#messageModal').modal('show');
   
@@ -98,6 +96,8 @@ $(document).ready(function(){
         
         firebase.auth().signInWithEmailAndPassword(data.email, data.password)
           .then(function(authData) {
+            document.getElementById('login_error').innerHTML = "";
+            $('#loginModal').modal('hide');
             console.log("Authenticated successfully with payload:", authData);
             auth = authData;
             $('#messageModalLabel').html(spanText('Success!', ['center', 'success']))
@@ -105,6 +105,7 @@ $(document).ready(function(){
           })
           .catch(function(error) {
             console.log("Login Failed!", error);
+            document.getElementById('login_error').innerHTML = "Incorrect Email or Password";
             $('#messageModalLabel').html(spanText('ERROR: '+error.code, ['danger']))
           });
       }
