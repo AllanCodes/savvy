@@ -15,10 +15,9 @@ $(document).ready(function(){
     //create firebase references
     var Auth = firebase.auth(); 
     var dbRef = firebase.database();
-    var contactsRef = dbRef.ref('contacts')
-    var usersRef = dbRef.ref('users')
+    var usersRef = dbRef.ref('users/')
     var auth = null;
-  
+
 
     $('#loginModal').on('shown.bs.modal', function(e) {
       $('#loginEmail').focus();
@@ -29,6 +28,10 @@ $(document).ready(function(){
     });
 
     //Register
+    $('#registerConfirmPassword').keypress(function (e) {
+      if (e.keyCode == 13) $('#doRegister').click();
+    })
+
     $('#doRegister').on('click', function (e) {
       e.preventDefault();
       $('#registerModal').modal('hide');
@@ -51,17 +54,13 @@ $(document).ready(function(){
             .createUserWithEmailAndPassword(data.email, passwords.password)
             .then(function(user){
               //now user is needed to be logged in to save data
-              console.log("Authenticated successfully:", user);
-              auth = user;
-              //now saving the profile data
-              usersRef
-                .child(user.uid)
-                .set(data)
-                .then(function(){
-                  console.log("User Information Saved:", user.uid);
-                })
+              //console.log("Authenticated successfully:", user);
+              //auth = user;
+              usersRef.child(user.uid).set(data).then(function () {
+                console.log("Successfully created user account with uid:", user.uid);
+                window.location.href = "home.html";
+              });
               $('#messageModalLabel').html(spanText('Success!', ['center', 'success']))
-              console.log("Successfully created user account with uid:", user.uid);
               $('#messageModalLabel').html(spanText('Successfully created user account!', ['success']))
             })
             .catch(function(error){
@@ -85,7 +84,6 @@ $(document).ready(function(){
     })
 
     $('#doLogin').on('click', function (e) {
-      //$('#formm').submit(function(e) {
       e.preventDefault();
       $('#loginModal').modal('hide');
       $('#messageModalLabel').html(spanText('<i class="fa fa-cog fa-spin"></i>', ['center', 'info']));
@@ -97,6 +95,7 @@ $(document).ready(function(){
           email: $('#loginEmail').val(),
           password: $('#loginPassword').val()
         };
+        
         firebase.auth().signInWithEmailAndPassword(data.email, data.password)
           .then(function(authData) {
             console.log("Authenticated successfully with payload:", authData);

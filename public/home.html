@@ -3,11 +3,13 @@
 <head>
 	<script src="/__/firebase/4.0.0/firebase-app.js"></script>
 	<script src="/__/firebase/4.0.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
 	<script src="/__/firebase/init.js"></script>
+	<src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 	<script>
 			firebase.auth().onAuthStateChanged(function(user) {
 			if (user) {
-				console.log(user.email);
 			}
 			else {
 				window.location.href = "index.html"
@@ -22,8 +24,6 @@
 	<link rel="stylesheet" href="/dhtml/codebase/dhtmlxscheduler.css" type="text/css" charset="utf-8">
 	<link rel="stylesheet" href="search.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
 	<title>Savvy - Next Generation Calendar</title>
 </head>
@@ -44,7 +44,7 @@
 			<div class="col-md-6 text-center">		
 					<div class="input-group add-on">
 					   <input type="text" class="form-control" placeholder="Search" id="search">
-					  <span class="input-group-btn" style="bottom:2.5px">
+					  <span class="input-group-btn" style="bottom: 2.5px">
 						 <button class="btn btn-default" type="submit">
 							 <span class="glyphicon glyphicon-search"></span>
 						 </button>
@@ -88,4 +88,5 @@
 	}
 </script>
 <script src="typeahead.js"></script>
+<script src="getData.js"></script>
 </html>
