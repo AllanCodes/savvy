@@ -1,6 +1,13 @@
 import requests
 import json
 
+
+
+"""
+    * TODO: change names to hashes for quicker access and remove special characters from name inside each object
+
+
+"""
 class eventBrite():
     """
     Grab events from EventBrite
@@ -20,13 +27,16 @@ class eventBrite():
         if (r.status_code == 200):
             cats = dict({})
             l_ = r.json()["categories"]
+            count = 0
             for category in l_:
+                count += 1
                 if (category["name"] != None):
                     d_ = {
                         "category": category["name"],
                         "id": category["id"]
                     }
                     cats[category["name"]] = d_
+            cats["category_count"] = count
             return cats
 
 
@@ -42,7 +52,9 @@ class eventBrite():
             for x in range(pages):
                 ep = self.base_url + "events/search/" + self.token + "&location.address=" + city + "&page=" + str(x) + "&location.within=" + str(within) + "mi" + "&categories=" + str(category)
                 l_ = r.json()["events"]
+                count = 0
                 for event in l_:
+                    count += 1
                     d_ = {
                             "name": event["name"]["text"],
                             "start_time": event["start"]["local"],
@@ -53,7 +65,7 @@ class eventBrite():
                     }
                     title = event["name"]["text"].translate(str.maketrans('','','$#[]/.'))
                     events[title] = d_
-
+            events["events_count"] = count
             return events
     
 
@@ -69,6 +81,7 @@ if __name__ == "__main__":
    #pass
     p = eventBrite()
     p.categories()
-    #p.events()
+    p.events()
+
     p.writeJson(p.categories(), "d.json")
-   # p.writeJson(p.events(), "events.json")
+    p.writeJson(p.events(), "events.json")
