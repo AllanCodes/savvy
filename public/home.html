@@ -37,17 +37,17 @@
 </style>
 
 <body onload="init();">
-	<div>
+	<div class="container-fluid">
 		<span class="menu">
 			<button type="button" id="sign-out" class="btn btn-danger pull-left" onclick="signOut();"> Sign Out </button>
 			<button type="button" id="explore" class="btn btn-info pull-right">
 				<span class="glyphicon glyphicon-menu-hamburger"></span> Explore 
 			</button>
-			<div class="col-md-6 text-center">		
+			<div class="col-md-6 text-center col-md-auto">		
 					<div class="input-group add-on">
 					   <input type="text" class="form-control" placeholder="Search" id="search">
 					  <span class="input-group-btn" style="bottom: 2.5px">
-						 <button class="btn btn-default" type="submit">
+						 <button class="btn btn-default" type="submit" id="submit">
 							 <span class="glyphicon glyphicon-search"></span>
 						 </button>
 						</span>
@@ -77,7 +77,15 @@
 <script type="text/javascript" charset="utf-8">
 	
 	function init() {
-		scheduler.init('scheduler_here',new Date(2018,0,1),"week");		
+		var today = new Date();	
+		scheduler.init('scheduler_here',today, "week");	
+	scheduler.addEvent({
+    		start_date: "26-01-2018 09:00",
+			end_date:   "26-01-2018 12:00",
+			text:   "Meeting",
+			holder: "John", //userdata
+			room:   "5"     //userdata
+});		
 	}
 
 	function signOut() {
@@ -91,4 +99,5 @@
 </script>
 <script src="typeahead.js"></script>
 <script src="getData.js"></script>
+<script src="searchResults.js"></script>
 </html>
