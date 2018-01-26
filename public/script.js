@@ -34,7 +34,6 @@ $(document).ready(function(){
 
     $('#doRegister').on('click', function (e) {
       e.preventDefault();
-      $('#registerModal').modal('hide');
       $('#messageModalLabel').html(spanText('<i class="fa fa-cog fa-spin"></i>', ['center', 'info']));
       $('#messageModal').modal('show');
       var data = {
@@ -55,19 +54,19 @@ $(document).ready(function(){
             .then(function(user){
               //now user is needed to be logged in to save data
               usersRef.child(user.uid).set(data).then(function () {
+                $('#registerModal').modal('hide');
                 console.log("Successfully created user account with uid:", user.uid);
-                window.location.href = "home.html";
+                //window.location.href = "home.html";
+                window.location.href = "questions.html";
               });
-              $('#messageModalLabel').html(spanText('Success!', ['center', 'success']))
-              $('#messageModalLabel').html(spanText('Successfully created user account!', ['success']))
             })
             .catch(function(error){
+              document.getElementById("register_error").innerHTML = error.message;
               console.log("Error creating user:", error);
-              $('#messageModalLabel').html(spanText('ERROR: '+error.code, ['danger']))
             });
         } else {
           //password and confirm password didn't match
-          $('#messageModalLabel').html(spanText("ERROR: Passwords didn't match", ['danger']))
+          document.getElementById("register_error").innerHTML = "Passwords don't match";
         }
       }  
     });

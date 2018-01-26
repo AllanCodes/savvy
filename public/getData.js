@@ -14,12 +14,15 @@ $(document).ready(function() {
       };
       if (!firebase.apps.length)
         firebase.initializeApp(config);
-
-        var Auth = firebase.auth(); 
+        
+        //focus search bar on load
+        $('#search').focus();
+        //set up database reference
         var dbRef = firebase.database();
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
                 firebase.database().ref('users/' + user.uid).once('value').then(function (snapshot) {
+                    //notify user of their name w/ welcome msg
                     $.notify("Welcome " + snapshot.val().firstName, "success");
                 });
             }
