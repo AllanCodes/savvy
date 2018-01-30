@@ -2,12 +2,6 @@ import requests
 import json
 
 
-
-"""
-    * TODO: change names to hashes for quicker access and remove special characters from name inside each object
-
-
-"""
 class eventBrite():
     """
     Grab events from EventBrite
@@ -79,9 +73,9 @@ class eventBrite():
 
 if __name__ == "__main__":
    #pass
-    p = eventBrite()
-    p.categories()
-    p.events()
+    # p = eventBrite()
+    # p.categories()
+    # p.events()
 
-    p.writeJson(p.categories(), "d.json")
-    p.writeJson(p.events(), "events.json")
+    # p.writeJson(p.categories(), "d.json")
+    # p.writeJson(p.events(), "events.json")
