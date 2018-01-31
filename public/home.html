@@ -28,6 +28,8 @@
 	<link rel="stylesheet" href="search.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+	<script src="getData.js"></script>
+	<script src="searchResults.js"></script>
 	<title>Savvy - Next Generation Calendar</title>
 </head>
 
@@ -47,7 +49,7 @@
 			<div class="col-md-6 text-center col-md-auto">		
 					<div class="input-group add-on">
 					   <input type="text" class="form-control" placeholder="Search" id="search">
-					  <span class="input-group-btn" style="bottom: 2.5px">
+					  <span class="input-group-btn">
 						 <button class="btn btn-default" type="submit" id="submit">
 							 <span class="glyphicon glyphicon-search"></span>
 						 </button>
@@ -75,19 +77,19 @@
 
 <script src="auto-complete.min.js"></script>
 </body>
-
 <script type="text/javascript" charset="utf-8">
-	
+	window.onload(loadData());
+
 	function init() {
 		var today = new Date();	
 		scheduler.init('scheduler_here',today, "week");	
-	scheduler.addEvent({
-    		start_date: "26-01-2018 09:00",
-			end_date:   "26-01-2018 12:00",
+		scheduler.addEvent({
+    		start_date: "03-02-2018 09:00",
+			end_date:   "03-02-2018 12:00",
 			text:   "Meeting",
 			holder: "John", 
 			room:   "5"     
-});		
+		});		
 	}
 
 	function signOut() {
@@ -99,7 +101,4 @@
 		}
 	}
 </script>
-<script src="typeahead.js"></script>
-<script src="getData.js"></script>
-<script src="searchResults.js"></script>
 </html>

@@ -4,25 +4,23 @@
  * Grab input from search bar and provide results from Firebase
  */
 
-
- $(document).ready(function() {
-
-
-    $('#submit').on('click', function(e) {
+    function loadData() {
+        console.log("fe");
         let db = firebase.database();
         let eventsRef = db.ref("/events/");
         let catRef = db.ref("/categories");
-        let user = firebase.auth().currentUser.uid; 
+        let user = "";
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+              user = firebase.auth().currentUser.uid;
+            }
+          });
         let eventCount = 0;
         let currentEvents = [];
         let queryEvents = [];
         let categories = [];
 
         query = $('#search').val(); //current search string
-        //do something (nothing) for empty string
-        if (query == null) {
-            return;
-        }
 
         catRef.once("value", function(s) { 
             s.forEach(function(c) {
@@ -31,16 +29,21 @@
             });  
             let arr = [];
             categories.forEach(function(event, idx) {
-                if (event.toLowerCase().indexOf(query.toLowerCase()) != -1) {
-                    arr.push(String(event));
-                    console.log(event);
+                arr.push(String(event));
+                if (idx === categories.length - 1) {
+                    var demo1 = new autoComplete({
+                        selector: '#search',
+                        minChars: 1,
+                        source: function(term, suggest){
+                            term = term.toLowerCase();
+                            var choices = arr;
+                            var suggestions = [];
+                            for (i=0;i<choices.length;i++)
+                                if (~choices[i].toLowerCase().indexOf(term)) suggestions.push(choices[i]);
+                            suggest(suggestions);
+                        }
+                    });
                 }
-                // if (idx === categories.length - 1) {
-                //     $('#search').typeahead(
-                //     {
-                //         local: arr
-                //     });
-                // }
             });
         });
 
@@ -59,8 +62,4 @@
 
 
         
-
-
-
-    }); //submit
- });
+    }
