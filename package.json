@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/AllanCodes/savvy#readme",
   "dependencies": {
+    "bootstrap": "^4.0.0",
+    "bootstrap-switch": "^3.3.4",
     "easy-autocomplete": "^1.3.5",
     "facebook-events-by-location": "^0.13.0",
     "facebook-events-by-location-core": "^0.9.1",
