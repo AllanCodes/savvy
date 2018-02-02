@@ -6,6 +6,9 @@
 
     let globalAutoComplete = null;
 
+    /**
+     * Toggles all buttons in the category section to their opposite current value
+     */
     function toggleAll() {
         let catref = firebase.database().ref("/categories");
         let count = 0;
@@ -16,7 +19,10 @@
             }
         });
     }
-    //attach this to search for automatic updates according to category
+
+    /**
+     * Grab current state of all categories in "show categories" and load event data based on selected categories
+     */
     function loadUserCategories() {
         if (globalAutoComplete !== null)
             globalAutoComplete.destroy();
@@ -64,6 +70,29 @@
         $('#categoriesModal').modal('hide');    
     }
 
+    /**
+     * create category check boxes in "show categories"
+     */
+    function createCheckBox() {
+        let ref = firebase.database().ref("/categories/");
+        let count = 0;
+        let categories = [];
+        ref.once("value", function(s) {
+            count = s.val().category_count;
+            s.forEach(function(category) {
+                if (category.val().category !== undefined) {
+                    categories.push(String(category.val().category));
+                }
+            });
+            categories.forEach(function(cats, idx) {
+                $('#mbody').append("<h2 class=\"h4\">" + cats + "</h2>");
+                $('#mbody').append("<input type=\"checkbox\" name=\"chbox" + String(idx) + "\" checked=\"true\">");
+                $("[name='chbox" + String(idx) + "']").bootstrapSwitch();
+            });
+            console.log(count + " categories added");
+        });
+    }
+    
     function loadData() {
         let db = firebase.database();
         let eventsRef = db.ref("/events");
@@ -81,63 +110,5 @@
         let queryEvents = [];
         let categories = [];
         query = $('#search').val(); //current search string
-
-        catRef.once("value", function(s) { 
-            function createCheckbox(categories) {
-                categories.forEach(function(cats, idx) {
-                    $('#mbody').append("<h2 class=\"h4\">" + cats + "</h2>");
-                    $('#mbody').append("<input type=\"checkbox\" name=\"chbox" + String(idx) + "\" checked=\"true\">");
-                    $("[name='chbox" + String(idx) + "']").bootstrapSwitch();
-                });
-                console.log(categoryCount + " categories added");
-                return;
-            }
-
-            categoryCount = s.val().category_count;
-            s.forEach(function(c) {
-                if (c.val().category !== undefined) {
-                    categories.push(c.val().category);
-                }
-            });  
-            let arr = [];
-            categories.forEach(function(event, idx) {
-                arr.push(String(event));
-                if (idx === categories.length - 1) {
-                    createCheckbox(arr);
-                    //search suggestions here
-                }
-            });
-        });
-
-        
-        $('#submit').keypress(function (e) {
-            if (e.keyCode == 13) $('#submit').click();
-          });
-
-        let selectedCats = ["Music", "School Activities"]
-        $('#submit').on('click', function(e) {
-             //pull all events and store names and event count
-            let eve = [];
-            eventsRef.once("value", function(s) {
-            if (s.val() == null) {
-                console.log("ERROR: one time fetch");
-            } else {
-                // s.child("Music").forEach(function(events) {
-                //     console.log(events.val());
-                // }); 
-                selectedCats.forEach(function(c) {
-                    s.child(c).forEach(function(events) {
-                        if (events.key !== "events_count" && events.key !== "id") {
-                            console.log(c + ": ");
-                            console.log(events.key + " , ");
-                            console.log(events.val());
-                        }
-                    });
-                })
-            }
-        });
-        });
-
-
         
     }
