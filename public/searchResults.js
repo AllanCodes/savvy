@@ -4,15 +4,32 @@
  * Grab input from search bar and provide results from Firebase
  */
 
+    let globalAutoComplete = null;
 
+    function toggleAll() {
+        let catref = firebase.database().ref("/categories");
+        let count = 0;
+        catref.once("value", function(s) {
+            count = s.val().category_count;
+            for ( let i = 0; i < count; i++ ) {
+                $("input[name='chbox" + i + "']").bootstrapSwitch('toggleState');
+            }
+        });
+    }
+    //attach this to search for automatic updates according to category
     function loadUserCategories() {
-        let ref = firebase.database().ref("/categories/");
+        if (globalAutoComplete !== null)
+            globalAutoComplete.destroy();
+        let catref = firebase.database().ref("/categories");
+        let eventref = firebase.database().ref("/events");
         let count = 0;
         let allCats = [];
         let userCats = [];
-        ref.once("value", function(s) {
+        catref.once("value", function(s) {
+            let filteredEvents = [];
             s.forEach(function(o) {
-                allCats.push(s.val().category);
+                if (o.val().category !== undefined)
+                    allCats.push(o.val().category);
             });
             count = s.val().category_count;
             for ( let i = 0; i < count; i++ ) {
@@ -20,8 +37,31 @@
                     userCats.push(allCats[i]);
                 }
             }
+            //get events according to user categories
+            eventref.once("value", function(s) {
+                //loop user events
+                userCats.forEach(function(c, idx) {
+                    s.child(c).forEach(function(event, idx) {
+                        if (event.val().name !== undefined) {
+                            filteredEvents.push(String(event.val().name));
+                        }
+                    });
+                });
+            globalAutoComplete = new autoComplete({
+                selector: '#search',
+                minChars: 1,
+                source: function(term, suggest){
+                    term = term.toLowerCase();
+                    var choices = filteredEvents;
+                    var suggestions = [];
+                    for (i=0;i<choices.length;i++)
+                        if (~choices[i].toLowerCase().indexOf(term)) suggestions.push(choices[i]);
+                    suggest(suggestions);
+                    }
+                }); 
+            });
         });
-        $('#categoriesModal').modal('hide');
+        $('#categoriesModal').modal('hide');    
     }
 
     function loadData() {
@@ -64,18 +104,7 @@
                 arr.push(String(event));
                 if (idx === categories.length - 1) {
                     createCheckbox(arr);
-                    // var searchBar = new autoComplete({
-                    //     selector: '#search',
-                    //     minChars: 1,
-                    //     source: function(term, suggest){
-                    //         term = term.toLowerCase();
-                    //         var choices = arr;
-                    //         var suggestions = [];
-                    //         for (i=0;i<choices.length;i++)
-                    //             if (~choices[i].toLowerCase().indexOf(term)) suggestions.push(choices[i]);
-                    //         suggest(suggestions);
-                    //     }
-                    // });
+                    //search suggestions here
                 }
             });
         });
