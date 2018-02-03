@@ -9,7 +9,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
-	<link rel="stylesheet" href="auto-complete.css">
+	<link rel="stylesheet" href="auto-complete/auto-complete.css">
 	<script>
 			firebase.auth().onAuthStateChanged(function(user) {
 			if (user) {
@@ -66,11 +66,65 @@
 					</div>
 					</div>
 				</div>
+				<!-- Modal -->
+				<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModal" aria-hidden="true">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="currEvent">Add this event to your calendar</h5>
+								<p></p>
+								<button type="button" class="btn btn-primary" id="addEvent" onclick="toggleAll();">Add Event</button>
+							</div>
+							<div class="modal-body" id="eventmbody">
+								<!-- <h4>
+									Name: 
+									<small class="text-muted" id="event_name"></small>
+								</h4>
+								<h4>
+									Time:
+									<small class="text-muted" id="event_start"></small>
+								</h4>
+								<h4>
+									Url:
+									<small class="text-muted"><a href="" id="event_url" target="_blank"></a></small>
+								</h4>
+								<h4>
+									Description:
+									<small class="text-muted" id="event_description"></small>
+								</h4> -->
+								<dl class="row">
+										<dt class="col-sm-3">Name: </dt>
+										<dd class="col-sm-9">
+											<small class="text-muted" id="event_name"></small>
+										</dd>
+									  
+										<dt class="col-sm-3">Time: </dt>
+										<dd class="col-sm-9">
+											<small class="text-muted" id="event_start"></small>
+										</dd>
+									  
+										<dt class="col-sm-3">Url: </dt>
+										<dd class="col-sm-9">
+											<small class="text-muted"><a href="" id="event_url" target="_blank"></a></small>
+										</dd>
+									  
+										<dt class="col-sm-3">Description: </dt>
+										<dd class="col-sm-9">
+											<small class="text-muted" id="event_description"></small>
+										</dd>
+									  </dl>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-primary" data-dismiss="modal" aria-label="Close">Close</button>
+							</div>
+						</div>
+					</div>
+				</div>
 			<div class="col-md-6 text-center col-md-auto">		
 					<div class="input-group add-on">
 					   <input type="text" class="form-control" placeholder="Search" id="search">
 					  <span class="input-group-btn">
-						 <button class="btn btn-default" type="submit" id="submit">
+						 <button class="btn btn-default" type="submit" id="submit" onclick="grabQueriedEvent();">
 							 <span class="glyphicon glyphicon-search"></span>
 						 </button>
 						</span>
@@ -99,6 +153,8 @@
 <script type="text/javascript" charset="utf-8">
 	window.onload(loadData());
 	createCheckBox();
+	loadUserCategories();
+
 	function init() {
 		var today = new Date();	
 		scheduler.init('scheduler_here',today, "week");	
@@ -119,5 +175,5 @@
 		}
 	}
 </script>
-<script src="auto-complete.min.js"></script>
+<script src="auto-complete/auto-complete.min.js"></script>
 </html>
