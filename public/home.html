@@ -76,22 +76,6 @@
 								<button type="button" class="btn btn-primary" id="addEvent" onclick="toggleAll();">Add Event</button>
 							</div>
 							<div class="modal-body" id="eventmbody">
-								<!-- <h4>
-									Name: 
-									<small class="text-muted" id="event_name"></small>
-								</h4>
-								<h4>
-									Time:
-									<small class="text-muted" id="event_start"></small>
-								</h4>
-								<h4>
-									Url:
-									<small class="text-muted"><a href="" id="event_url" target="_blank"></a></small>
-								</h4>
-								<h4>
-									Description:
-									<small class="text-muted" id="event_description"></small>
-								</h4> -->
 								<dl class="row">
 										<dt class="col-sm-3">Name: </dt>
 										<dd class="col-sm-9">
@@ -154,18 +138,7 @@
 	window.onload(loadData());
 	createCheckBox();
 	loadUserCategories();
-
-	function init() {
-		var today = new Date();	
-		scheduler.init('scheduler_here',today, "week");	
-		scheduler.addEvent({
-    		start_date: "03-02-2018 09:00",
-			end_date:   "03-02-2018 12:00",
-			text:   "Meeting",
-			holder: "John", 
-			room:   "5"     
-		});		
-	}
+	
 	function signOut() {
 		var user = firebase.auth().currentUser;
 		if (user != null) {
