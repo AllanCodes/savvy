@@ -12,22 +12,10 @@
 		var today = new Date();	
         scheduler.init('scheduler_here',today, "week");		
     }
-
-    function pushEvent() {
-        // scheduler.addEvent({
-        //     start_date: "03-02-2018 07:00:00",
-        //     end_date:   "03-02-2018 12:00:00",
-        //     text:   "Meeting",
-        //     holder: "John", 
-        //     room:   "5"     
-        // });	
-
-    }
     /**
      * Toggles all buttons in the category section to their opposite current value
      */
     function toggleAll() {
-        pushEvent();
         let catref = firebase.database().ref("/categories");
         let count = 0;
         catref.once("value", function(s) {
@@ -88,6 +76,42 @@
         $('#categoriesModal').modal('hide');    
     }
 
+    function addCalendarEvent() {
+        let eventRef = firebase.database().ref("/events");
+        let catRef = firebase.database().ref("/categories");
+        let categories = [];
+        let query = $('#search').val();
+        catRef.once("value", function(s) {
+            s.forEach(function(cat) {
+                if (cat.val().category !== undefined)
+                    categories.push(cat.val().category);
+            });
+            eventRef.once("value", function(p) {
+                function addCalendarEvent(event) {
+                    let start = new Date(String(event.val().start_time.replace("T", ' ')));
+                    let end = new Date(String(event.val().end_time.replace("T", ' ')));
+                    scheduler.addEvent({
+                        start_date: start.getDate() + "-" + String(parseInt(start.getMonth())+ 1) + "-" + start.getFullYear() + " " + start.getHours() + ":" + start.getMinutes() + ":" + start.getSeconds(),
+                        end_date: end.getDate() + "-" + String(parseInt(end.getMonth())+ 1) + "-" + end.getFullYear() + " " + end.getHours()+ ":" + end.getMinutes() + ":" + end.getSeconds(),
+                        text: String(event.val().name)
+                        
+                    });
+                }
+                categories.forEach(function(c, idx) {
+                    p.child(c).forEach(function(event, idx) {
+                        if (event.val().name !== undefined && (String(event.val().name.replace(/ /g, '')) === query.replace(/ /g, ''))) {
+                                addCalendarEvent(event);
+                                let start = new Date(String(event.val().start_time.replace("T", ' ')));
+                                $('#eventModal').modal('toggle');
+                                $('#eventAddedModal').modal('toggle');
+                                $('#event_name2').text(String(event.val().name));
+                                $('#event_start2').text(start);
+                        }
+                    });
+                });
+            });
+        });
+    }
     function grabQueriedEvent() {
             let eventRef = firebase.database().ref("/events");
             let catRef = firebase.database().ref("/categories");
@@ -99,26 +123,14 @@
                         categories.push(cat.val().category);
                 });
                 eventRef.once("value", function(p) {
-                    function addCalendarEvent(event) {
-                        let start = new Date(String(event.val().start_time.replace("T", ' ')));
-                        let end = new Date(String(event.val().end_time.replace("T", ' ')));
-                        scheduler.addEvent({
-                            start_date: start.getDate() + "-" + String(parseInt(start.getMonth())+ 1) + "-" + start.getFullYear() + " " + start.getHours() + ":" + start.getMinutes() + ":" + start.getSeconds(),
-                            end_date: end.getDate() + "-" + String(parseInt(end.getMonth())+ 1) + "-" + end.getFullYear() + " " + end.getHours()+ ":" + end.getMinutes() + ":" + end.getSeconds(),
-                            text: String(event.val().name)
-                            // start_date: "2-5-2018 8:0:0",
-                            // end_date: "2-5-2018 9:0:0",
-                            // text: "market"                            
-                        });
-                    }
                     categories.forEach(function(c, idx) {
                         p.child(c).forEach(function(event, idx) {
                             if (event.val().name !== undefined && (String(event.val().name.replace(/ /g, '')) === query.replace(/ /g, ''))) {
-                                addCalendarEvent(event);
+                                let start = new Date(String(event.val().start_time.replace("T", ' ')));
                                 $('#event_name').text(String(event.val().name));
                                 $('#event_url').text(String(event.val().url));
                                 $('#event_url').attr('href', String(event.val().url));
-                                $('#event_start').text(String(event.val().start_time));
+                                $('#event_start').text(start);
                                 $('#event_description').text(String(event.val().description));
                                 $('#eventModal').modal('toggle');
                             }

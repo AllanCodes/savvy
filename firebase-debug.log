@@ -1,41 +1,122 @@
-[debug] [2018-02-03T03:31:13.974Z] ----------------------------------------------------------------------
-[debug] [2018-02-03T03:31:13.976Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve --only functions,hosting
-[debug] [2018-02-03T03:31:13.977Z] CLI Version:   3.17.4
-[debug] [2018-02-03T03:31:13.977Z] Platform:      darwin
-[debug] [2018-02-03T03:31:13.977Z] Node Version:  v6.11.3
-[debug] [2018-02-03T03:31:13.977Z] Time:          Fri Feb 02 2018 19:31:13 GMT-0800 (PST)
-[debug] [2018-02-03T03:31:13.977Z] ----------------------------------------------------------------------
+[debug] [2018-02-03T22:07:39.970Z] ----------------------------------------------------------------------
+[debug] [2018-02-03T22:07:39.973Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve --only functions,hosting
+[debug] [2018-02-03T22:07:39.973Z] CLI Version:   3.17.4
+[debug] [2018-02-03T22:07:39.973Z] Platform:      darwin
+[debug] [2018-02-03T22:07:39.973Z] Node Version:  v6.11.3
+[debug] [2018-02-03T22:07:39.974Z] Time:          Sat Feb 03 2018 14:07:39 GMT-0800 (PST)
+[debug] [2018-02-03T22:07:39.974Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2018-02-03T03:31:13.991Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2018-02-03T03:31:13.991Z] > authorizing via signed-in user
-[debug] [2018-02-03T03:31:13.993Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
-[debug] [2018-02-03T03:31:13.993Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+[debug] [2018-02-03T22:07:39.988Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-02-03T22:07:39.989Z] > authorizing via signed-in user
+[debug] [2018-02-03T22:07:39.991Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-02-03T22:07:39.991Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
  { refresh_token: '1/_Bp5kRookj4-keu_OIIt5IV8LgqmGU5gGcxLSKD9jts',
   client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
   client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
   grant_type: 'refresh_token',
   scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
- Fri Feb 02 2018 19:31:13 GMT-0800 (PST)
-[debug] [2018-02-03T03:31:14.290Z] <<< HTTP RESPONSE 200
-[debug] [2018-02-03T03:31:14.298Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/savvy-aa31e  
+ Sat Feb 03 2018 14:07:39 GMT-0800 (PST)
+[debug] [2018-02-03T22:07:40.257Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-03T22:07:40.265Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/savvy-aa31e  
   
- Fri Feb 02 2018 19:31:14 GMT-0800 (PST)
-[debug] [2018-02-03T03:31:14.953Z] <<< HTTP RESPONSE 200
-[debug] [2018-02-03T03:31:14.954Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/savvy-aa31e/tokens  
+ Sat Feb 03 2018 14:07:40 GMT-0800 (PST)
+[debug] [2018-02-03T22:07:40.919Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-03T22:07:40.921Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/savvy-aa31e/tokens  
   
- Fri Feb 02 2018 19:31:14 GMT-0800 (PST)
-[debug] [2018-02-03T03:31:15.564Z] <<< HTTP RESPONSE 200
+ Sat Feb 03 2018 14:07:40 GMT-0800 (PST)
+[debug] [2018-02-03T22:07:41.429Z] <<< HTTP RESPONSE 200
 [info] 
 [info] === Serving from '/Users/aeivazia/Desktop/savvy'...
 [info] 
-[debug] [2018-02-03T03:31:15.568Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/savvy-aa31e  
+[debug] [2018-02-03T22:07:41.435Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/savvy-aa31e  
   
- Fri Feb 02 2018 19:31:15 GMT-0800 (PST)
-[debug] [2018-02-03T03:31:15.933Z] <<< HTTP RESPONSE 200
-[debug] [2018-02-03T03:31:15.934Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/66499803255/clients/_:getWebAppConfig  
+ Sat Feb 03 2018 14:07:41 GMT-0800 (PST)
+[debug] [2018-02-03T22:07:41.907Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-03T22:07:41.908Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/66499803255/clients/_:getWebAppConfig  
   
- Fri Feb 02 2018 19:31:15 GMT-0800 (PST)
-[debug] [2018-02-03T03:31:16.374Z] <<< HTTP RESPONSE 200
+ Sat Feb 03 2018 14:07:41 GMT-0800 (PST)
+[debug] [2018-02-03T22:07:52.248Z] <<< HTTP RESPONSE 503
+[debug] [2018-02-03T22:07:52.248Z] <<< HTTP RESPONSE BODY
+[error] 
+[error] Error: HTTP Error: 503, The service is currently unavailable.
+[debug] [2018-02-03T22:07:52.251Z] Error Context: {
+  "body": {
+    "error": {
+      "code": 503,
+      "message": "The service is currently unavailable.",
+      "status": "UNAVAILABLE"
+    }
+  },
+  "response": {
+    "statusCode": 503,
+    "body": {
+      "error": {
+        "code": 503,
+        "message": "The service is currently unavailable.",
+        "status": "UNAVAILABLE"
+      }
+    },
+    "headers": {
+      "vary": "X-Origin, Referer, Origin,Accept-Encoding",
+      "content-type": "application/json; charset=UTF-8",
+      "date": "Sat, 03 Feb 2018 22:07:13 GMT",
+      "server": "ESF",
+      "cache-control": "private",
+      "x-xss-protection": "1; mode=block",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "alt-svc": "hq=\":443\"; ma=2592000; quic=51303431; quic=51303339; quic=51303338; quic=51303337; quic=51303335,quic=\":443\"; ma=2592000; v=\"41,39,38,37,35\"",
+      "accept-ranges": "none",
+      "connection": "close"
+    },
+    "request": {
+      "uri": {
+        "protocol": "https:",
+        "slashes": true,
+        "auth": null,
+        "host": "mobilesdk-pa.googleapis.com",
+        "port": 443,
+        "hostname": "mobilesdk-pa.googleapis.com",
+        "hash": null,
+        "search": null,
+        "query": null,
+        "pathname": "/v1/projects/66499803255/clients/_:getWebAppConfig",
+        "path": "/v1/projects/66499803255/clients/_:getWebAppConfig",
+        "href": "https://mobilesdk-pa.googleapis.com/v1/projects/66499803255/clients/_:getWebAppConfig"
+      },
+      "method": "GET"
+    }
+  }
+}
+[debug] [2018-02-03T22:07:54.826Z] ----------------------------------------------------------------------
+[debug] [2018-02-03T22:07:54.828Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve --only functions,hosting
+[debug] [2018-02-03T22:07:54.829Z] CLI Version:   3.17.4
+[debug] [2018-02-03T22:07:54.829Z] Platform:      darwin
+[debug] [2018-02-03T22:07:54.829Z] Node Version:  v6.11.3
+[debug] [2018-02-03T22:07:54.829Z] Time:          Sat Feb 03 2018 14:07:54 GMT-0800 (PST)
+[debug] [2018-02-03T22:07:54.829Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-02-03T22:07:54.841Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-02-03T22:07:54.841Z] > authorizing via signed-in user
+[debug] [2018-02-03T22:07:54.843Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/savvy-aa31e  
+  
+ Sat Feb 03 2018 14:07:54 GMT-0800 (PST)
+[debug] [2018-02-03T22:07:55.328Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-03T22:07:55.329Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/savvy-aa31e/tokens  
+  
+ Sat Feb 03 2018 14:07:55 GMT-0800 (PST)
+[debug] [2018-02-03T22:07:55.794Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/aeivazia/Desktop/savvy'...
+[info] 
+[debug] [2018-02-03T22:07:55.798Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/savvy-aa31e  
+  
+ Sat Feb 03 2018 14:07:55 GMT-0800 (PST)
+[debug] [2018-02-03T22:07:56.243Z] <<< HTTP RESPONSE 200
+[debug] [2018-02-03T22:07:56.244Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/66499803255/clients/_:getWebAppConfig  
+  
+ Sat Feb 03 2018 14:07:56 GMT-0800 (PST)
+[debug] [2018-02-03T22:07:56.754Z] <<< HTTP RESPONSE 200
 [info] i  hosting: Serving hosting files from: public
 [info] ✔  hosting: Local server: http://localhost:5000
 
