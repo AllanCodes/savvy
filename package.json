@@ -25,6 +25,11 @@
     "facebook-events-by-location-core": "^0.9.1",
     "firebase-admin": "^5.8.1",
     "firebase-functions": "^0.8.1",
-    "semantic-ui": "^2.2.13"
+    "moby": "^1.1.2",
+    "node-import": "^0.9.2",
+    "popper.js": "^1.12.9",
+    "semantic-ui": "^2.2.13",
+    "thesaurus": "0.0.0",
+    "watchify": "^3.10.0"
   }
 }

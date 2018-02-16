@@ -9,7 +9,7 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
-	<link rel="stylesheet" href="auto-complete/auto-complete.css">
+	<link rel="stylesheet" href="/scripts/auto-complete/auto-complete.css">
 	<script>
 			firebase.auth().onAuthStateChanged(function(user) {
 			if (user) {
@@ -21,14 +21,14 @@
 		});
 	</script>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-	<script src="/dhtml/codebase/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
-	<link rel="stylesheet" href="/dhtml/codebase/dhtmlxscheduler.css" type="text/css" charset="utf-8">
+	<script src="/scripts/dhtml/codebase/dhtmlxscheduler.js" type="text/javascript" charset="utf-8"></script>
+	<link rel="stylesheet" href="/scripts/dhtml/codebase/dhtmlxscheduler.css" type="text/css" charset="utf-8">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
-	<script src="getData.js"></script>
-	<script src="searchResults.js"></script>
-	<link href="switches/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet">
-	<script src="switches/dist/js/bootstrap-switch.js"></script>
+	<script src="/scripts/getData.js"></script>
+	<script src="/scripts/searchResultsB.js"></script>
+	<link href="/scripts/switches/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet">
+	<script src="/scripts/switches/dist/js/bootstrap-switch.js"></script>
 	<title>Savvy - Next Generation Calendar</title>
 </head>
 
@@ -164,7 +164,7 @@
 	window.onload(loadData());
 	createCheckBox();
 	loadUserCategories();
-	
+
 	function signOut() {
 		var user = firebase.auth().currentUser;
 		if (user != null) {
@@ -174,5 +174,5 @@
 		}
 	}
 </script>
-<script src="auto-complete/auto-complete.min.js"></script>
+<script src="/scripts/auto-complete/auto-complete.min.js"></script>
 </html>
