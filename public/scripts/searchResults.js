@@ -238,7 +238,9 @@
                         if (~choices[i].toLowerCase().indexOf(stemmer(term))) {
                             suggestions.push(choices[i]);
                         } else {
-                            for ( let j = 0; j < synonyms.length; j++ ) {
+                            console.log("1");
+                            let len = synonyms.length;
+                            for ( let j = 0; j < len && j < 50; j++ ) {
                                 if (~choices[i].toLowerCase().indexOf(stemmer(synonyms[j]))) {
                                     suggestions.push(choices[i]);
                                     break;
