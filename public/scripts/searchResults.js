@@ -11,6 +11,22 @@
     global.init = function() {
         var today = new Date();	
         scheduler.init('scheduler_here',today, "week");	
+        scheduler.attachEvent("onSchedulerReady", function(){
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    firebase.database().ref('users/' + user.uid).once('value').then(function (snapshot) {
+                        let userProfileRef = firebase.database().ref('users/' + user.uid + "/events");
+                        userProfileRef.once("value", function(events) {
+                            events.forEach(function(a) {
+                                let e_ = a.val();
+                                scheduler.addEvent(e_);
+                            });
+                        });
+                    });
+                }
+            });
+        });
+        scheduler.setCurrentView(today);
     };
 
     
@@ -27,7 +43,6 @@
             }
         });
     }
-
 
     /**
      * Grab current state of all categories in "show categories" and load event data based on selected categories
@@ -226,8 +241,7 @@
                             }
                             return w;
                         }
-                    })();
-                    
+                    })();                    
                     let words = term.split(/\s|\/|\\|\?/);
                     let synonyms = [];
                     words.forEach(function(entry) {
@@ -238,7 +252,6 @@
                         if (~choices[i].toLowerCase().indexOf(stemmer(term))) {
                             suggestions.push(choices[i]);
                         } else {
-                            console.log("1");
                             let len = synonyms.length;
                             for ( let j = 0; j < len && j < 50; j++ ) {
                                 if (~choices[i].toLowerCase().indexOf(stemmer(synonyms[j]))) {
@@ -277,6 +290,20 @@
                         start_date: start_,
                         end_date: end_,
                         text: String(event.val().name)
+                    });
+                    firebase.auth().onAuthStateChanged(function(user) {
+                        if (user) {
+                            firebase.database().ref('users/' + user.uid).once('value').then(function (snapshot) {
+                                let e_ = {};
+                                e_[String(event.val().name)] = {
+                                    start_date: start_,
+                                    end_date: end_,
+                                    text: String(event.val().name)
+                                };
+                                let userProfileRef = firebase.database().ref('users/' + user.uid + "/events");
+                                userProfileRef.update(e_);
+                            });
+                        }
                     });
                     return start;
                 }
