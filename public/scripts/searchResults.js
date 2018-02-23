@@ -11,24 +11,55 @@
     global.init = function() {
         var today = new Date();	
         scheduler.init('scheduler_here',today, "week");	
+        loadUserEvents();
+        handleEventDeleted();
+        scheduler.setCurrentView(today);
+    };
+
+    function loadUserEvents() {
         scheduler.attachEvent("onSchedulerReady", function(){
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
                     firebase.database().ref('users/' + user.uid).once('value').then(function (snapshot) {
-                        let userProfileRef = firebase.database().ref('users/' + user.uid + "/events");
+                        let userProfileRef = firebase.database().ref('users/' + user.uid + "/events/");
                         userProfileRef.once("value", function(events) {
                             events.forEach(function(a) {
                                 let e_ = a.val();
-                                scheduler.addEvent(e_);
+                                let add = {
+                                    start_date: e_.start_date,
+                                    end_date: e_.end_date,
+                                    text: e_.text,
+                                }
+                                let id = scheduler.addEvent(add);
+                                let ref = firebase.database().ref('users/' + user.uid + "/events/" + e_.text + "/id");
+                                ref.set(id);
+
                             });
                         });
                     });
                 }
             });
         });
-        scheduler.setCurrentView(today);
-    };
+    }
 
+    function handleEventDeleted() {
+        scheduler.attachEvent("onEventDeleted", function(id){
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    firebase.database().ref('users/' + user.uid).once('value').then(function (snapshot) {
+                        let userProfileRef = firebase.database().ref('users/' + user.uid + "/events/");
+                        userProfileRef.once("value", function(e) {
+                            e.forEach(function(w) {
+                                if (Number(w.val().id) === Number(id)) {
+                                    userProfileRef.child(String(w.val().text)).remove();
+                                }
+                            })
+                        })
+                    });
+                }
+            });
+        });
+    }
     
     /**
      * Toggles all buttons in the category section to their opposite current value
@@ -286,7 +317,7 @@
                     let start_ = start.getDate() + "-" + String(parseInt(start.getMonth())+ 1) + "-" + start.getFullYear() + " " + start.getHours() + ":" + start.getMinutes() + ":" + start.getSeconds();
                     let end = new Date(String(event.val().end_time.replace("T", ' ')));
                     let end_ = end.getDate() + "-" + String(parseInt(end.getMonth())+ 1) + "-" + end.getFullYear() + " " + end.getHours()+ ":" + end.getMinutes() + ":" + end.getSeconds();
-                    scheduler.addEvent({
+                    let eventID = scheduler.addEvent({
                         start_date: start_,
                         end_date: end_,
                         text: String(event.val().name)
@@ -298,7 +329,8 @@
                                 e_[String(event.val().name)] = {
                                     start_date: start_,
                                     end_date: end_,
-                                    text: String(event.val().name)
+                                    text: String(event.val().name),
+                                    id: eventID
                                 };
                                 let userProfileRef = firebase.database().ref('users/' + user.uid + "/events");
                                 userProfileRef.update(e_);
