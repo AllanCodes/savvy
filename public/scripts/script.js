@@ -56,8 +56,8 @@ $(document).ready(function(){
               usersRef.child(user.uid).set(data).then(function () {
                 $('#registerModal').modal('hide');
                 console.log("Successfully created user account with uid:", user.uid);
-                //window.location.href = "home.html";
-                window.location.href = "questions.html";
+                window.location.href = "home.html";
+                // window.location.href = "questions.html";
               });
             })
             .catch(function(error){

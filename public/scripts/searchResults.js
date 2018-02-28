@@ -9,12 +9,18 @@
     let thesaurus = require("thesaurus");
 
     global.init = function() {
+        scheduler.config.lightbox_recurring = "instance";
+        scheduler.config.details_on_create=true;
+        scheduler.config.details_on_dblclick=true;
+        scheduler.config.include_end_by = true;
+        scheduler.config.repeat_precise = true;        
         var today = new Date();	
         scheduler.init('scheduler_here',today, "week");	
         loadUserEvents();
         handleEventDeleted();
         scheduler.setCurrentView(today);
     };
+
 
     function loadUserEvents() {
         scheduler.attachEvent("onSchedulerReady", function(){
@@ -69,9 +75,10 @@
         let count = 0;
         catref.once("value", function(s) {
             count = s.val().category_count;
-            for ( let i = 0; i < count; i++ ) {
+            for ( let i = 0; i < count+1; i++ ) {
                 $("input[name='chbox" + i + "']").bootstrapSwitch('toggleState');
             }
+
         });
     }
 
@@ -83,6 +90,7 @@
             globalAutoComplete.destroy();
         let catref = firebase.database().ref("/categories");
         let eventref = firebase.database().ref("/events");
+        let courseref = firebase.database().ref("/courses/UCI Courses/Terms/Winter 2018/Department/Computer Science");
         let count = 0;
         let allCats = [];
         let userCats = [];
@@ -98,16 +106,45 @@
                     userCats.push(allCats[i]);
                 }
             }
+            let options = ["UCI Courses", "Daytime Events", "Nighttime Events"];
+            for ( let i =count; i < count+3; i++ ) {
+                if($("input[name='chbox" + String(i) + "']").bootstrapSwitch('state')) {
+                    userCats.push(options[i-count]);
+                }
+            }
             //get events according to user categories
             eventref.once("value", function(s) {
                 //loop user events
                 userCats.forEach(function(c, idx) {
                     s.child(c).forEach(function(event, idx) {
                         if (event.val().name !== undefined) {
-                            filteredEvents.push(String(event.val().name));
+                            let test = true;
+                            let date = new Date(event.val().start_time.replace('T', ' '));
+                            if (userCats.indexOf("Daytime Events") !== -1) {
+                                if (date.getHours() < 17 && date.getHours() > 6 && test) {
+                                    filteredEvents.push(String(event.val().name));
+                                    test = false;
+                                }
+                            }
+                            if (userCats.indexOf("Nighttime Events") !== -1 && test) {
+                                if (date.getHours() >= 17 || date.getHours() <= 6) {
+                                    filteredEvents.push(String(event.val().name));
+                                    test = false;
+                                }
+                            } 
+                            // if (test)
+                            //     filteredEvents.push(String(event.val().name));
                         }
                     });
                 });
+            //courses
+            courseref.once("value", function(a) {
+                a.forEach(function(course) {
+                    if (userCats.indexOf("UCI Courses") !== -1 && String(course.key) !== "count")
+                        filteredEvents.push(String(course.key + ": " + course.val().name));
+                });
+            });
+            console.log(filteredEvents);
             globalAutoComplete = new autoComplete({
                 selector: '#search',
                 minChars: 1,
@@ -298,30 +335,51 @@
             });
         });
         $('#categoriesModal').modal('hide');    
+        $('#preferencesModal').modal('hide');    
     }
 
 
     global.addCalendarEvent = function() {
         let eventRef = firebase.database().ref("/events");
         let catRef = firebase.database().ref("/categories");
+        let courseRef = firebase.database().ref("/courses/UCI Courses/Terms/Winter 2018/Department/Computer Science");
         let categories = [];
         let query = $('#search').val();
+        let eventFound = false;
         catRef.once("value", function(s) {
             s.forEach(function(cat) {
                 if (cat.val().category !== undefined)
                     categories.push(cat.val().category);
             });
             eventRef.once("value", function(p) {
-                function addCalendarEvent(event) {
+                function addCalendarEvent(event, type) {
                     let start = new Date(String(event.val().start_time.replace("T", ' ')));
                     let start_ = start.getDate() + "-" + String(parseInt(start.getMonth())+ 1) + "-" + start.getFullYear() + " " + start.getHours() + ":" + start.getMinutes() + ":" + start.getSeconds();
                     let end = new Date(String(event.val().end_time.replace("T", ' ')));
                     let end_ = end.getDate() + "-" + String(parseInt(end.getMonth())+ 1) + "-" + end.getFullYear() + " " + end.getHours()+ ":" + end.getMinutes() + ":" + end.getSeconds();
-                    let eventID = scheduler.addEvent({
-                        start_date: start_,
-                        end_date: end_,
-                        text: String(event.val().name)
-                    });
+                    if (type === "event") {
+                        let eventID = scheduler.addEvent({
+                            start_date: start_,
+                            end_date: end_,
+                            text: String(event.val().name)
+                        });
+                     } //else if (type === "course") {
+                    //     let days = {"MWF": "1,3,5", "MW": "1,3", "M": "1", "W": "3", "F": "5", "WF": "3,5"};
+                    //     let rec = "week_1___";
+                    //     for (k in days) {
+                    //         if (event.meeting_time === k) {
+                    //             rec += days[k];
+                    //         } 
+                    //     }
+                        // let eventID = scheduler.addEvent({
+                        //     start_date: "2018-03-03 10:00:00",
+                        //     end_date: "2018-03-10 11:00:00",
+                        //     text: "words",
+                        //     details: "",
+                        //     rec_type: "week_1___1,2",
+                        // });
+                    // }
+
                     firebase.auth().onAuthStateChanged(function(user) {
                         if (user) {
                             firebase.database().ref('users/' + user.uid).once('value').then(function (snapshot) {
@@ -342,7 +400,8 @@
                 categories.forEach(function(c, idx) {
                     p.child(c).forEach(function(event, idx) {
                         if (event.val().name !== undefined && (String(event.val().name.replace(/ /g, '')) === query.replace(/ /g, ''))) {
-                                let view_time = addCalendarEvent(event);
+                                eventFound = true;
+                                let view_time = addCalendarEvent(event, "event");
                                 let start = new Date(String(event.val().start_time.replace("T", ' ')));
                                 $('#eventModal').modal('toggle');
                                 $('#eventAddedModal').modal('toggle');
@@ -352,13 +411,32 @@
                         }
                     });
                 });
+                if (!eventFound) {
+                    courseRef.once("value", function(m) {
+                        m.forEach(function(course) {
+                            if (query === (String(course.key + ": " + course.val().name))) {
+                                eventFound = true;
+                                let view_time = addCalendarEvent(course, "course");
+                                let start = new Date(String(course.val().start_time.replace("T", ' ')));
+                                $('#eventModal').modal('toggle');
+                                $('#eventAddedModal').modal('toggle');
+                                $('#event_name2').text(String(course.val().name));
+                                $('#event_start2').text(start);
+                                scheduler.setCurrentView(new Date(view_time));
+                            }
+                        });
+                    });
+                }
+                eventFound = false;
             });
         });
     }
     global.grabQueriedEvent = function() {
             let eventRef = firebase.database().ref("/events");
             let catRef = firebase.database().ref("/categories");
+            let courseRef = firebase.database().ref("/courses/UCI Courses/Terms/Winter 2018/Department/Computer Science");
             let categories = [];
+            let eventFound = false;
             let query = $('#search').val();
             catRef.once("value", function(s) {
                 s.forEach(function(cat) {
@@ -370,6 +448,7 @@
                         p.child(c).forEach(function(event, idx) {
                             if (event.val().name !== undefined && (String(event.val().name.replace(/ /g, '')) === query.replace(/ /g, ''))) {
                                 let start = new Date(String(event.val().start_time.replace("T", ' ')));
+                                eventFound = true;
                                 $('#event_name').text(String(event.val().name));
                                 $('#event_url').text(String(event.val().url));
                                 $('#event_url').attr('href', String(event.val().url));
@@ -380,9 +459,32 @@
                         });
                     });
                 });
+                if (!eventFound) {
+                    courseRef.once("value", function(a) {
+                        a.forEach(function(course) {
+                            if (query === (String(course.key + ": " + course.val().name))) {
+                                eventFound = true;
+                                let start = new Date(String(course.val().start_time.replace("T", ' ')));
+                                let end = new Date(String(course.val().end_time.replace("T", ' ')));
+                                let time_range = start.getHours() + ":" + (start.getMinutes()<10?'0':'') + start.getMinutes() + " - " + end.getHours() + ":" + (end.getMinutes()<10?'0':'') + end.getMinutes();
+                                $('#event_name').text(String(course.val().name));
+                                $('#event_url').text("https://www.reg.uci.edu/perl/WebSoc");
+                                $('#event_url').attr('href', "https://www.reg.uci.edu/perl/WebSoc");
+                                $('#event_start').text(course.val().meeting_time + ", " + time_range);
+                                $('#event_description').text(String(course.val().name));
+                                $('#eventModal').modal('toggle');
+                            }
+                        });
+                    });
+                }
             });
+            
+            eventFound = false;
         }   
 
+    global.loadPreferences = function() {
+
+    }
     /**
      * create category check boxes in "show categories"
      */
@@ -402,7 +504,19 @@
                 $('#mbody').append("<input type=\"checkbox\" name=\"chbox" + String(idx) + "\" checked=\"true\">");
                 $("[name='chbox" + String(idx) + "']").bootstrapSwitch();
             });
-            console.log(count + " categories added");
+                // $('#mbody').append("<h2 class=\"h4\">" + "UCI Courses" + "</h2>");
+                // $('#mbody').append("<input type=\"checkbox\" name=\"chbox" + String(count) + "\" checked=\"true\">");
+                // $("[name='chbox" + String(count) + "']").bootstrapSwitch();
+                // count++;
+                $('#prefmodalbody').append("<h2 class=\"h4\">" + "UCI Courses" + "</h2>");
+                $('#prefmodalbody').append("<input type=\"checkbox\" name=\"chbox" + String(count) + "\" checked=\"true\">");
+                $("[name='chbox" + String(count) + "']").bootstrapSwitch();
+                $('#prefmodalbody').append("<h2 class=\"h4\">" + "Daytime Events" + "</h2>");
+                $('#prefmodalbody').append("<input type=\"checkbox\" name=\"chbox" + String(count+1) + "\" checked=\"true\">");
+                $("[name='chbox" + String(count+1) + "']").bootstrapSwitch();
+                $('#prefmodalbody').append("<h2 class=\"h4\">" + "Nighttime Events" + "</h2>");
+                $('#prefmodalbody').append("<input type=\"checkbox\" name=\"chbox" + String(count+2) + "\" checked=\"true\">");
+                $("[name='chbox" + String(count+2) + "']").bootstrapSwitch();
         });
     }
 
