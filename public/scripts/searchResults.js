@@ -31,15 +31,31 @@
                         userProfileRef.once("value", function(events) {
                             events.forEach(function(a) {
                                 let e_ = a.val();
-                                let add = {
-                                    start_date: e_.start_date,
-                                    end_date: e_.end_date,
-                                    text: e_.text,
+                                let add = {};
+                                if (e_.type === "event") {
+                                    add = {
+                                        start_date: e_.start_date,
+                                        end_date: e_.end_date,
+                                        text: e_.text,
+                                    }
+                                } else if (e_.type === "course") {
+                                    let start = new Date(String(e_.start_date.replace("T", ' ')));
+                                    let end = new Date(String(e_.end_date.replace("T", ' ')));
+                                    let s_ = new Date(start.getFullYear(), start.getMonth(), start.getDate(), start.getHours(), start.getMinutes());
+                                    let ee_ = new Date(end.getFullYear(), end.getMonth(), end.getDate(), end.getHours(), end.getMinutes());
+                                    add = {
+                                        start_date: s_,
+                                        end_date: ee_,
+                                        text: e_.text,
+                                        details: e_.details,
+                                        rec_type: e_.rec_type,
+                                        event_length: e_.event_length,
+                                        event_pid: e_.event_pid
+                                    }
                                 }
                                 let id = scheduler.addEvent(add);
                                 let ref = firebase.database().ref('users/' + user.uid + "/events/" + e_.text + "/id");
                                 ref.set(id);
-
                             });
                         });
                     });
@@ -56,8 +72,14 @@
                         let userProfileRef = firebase.database().ref('users/' + user.uid + "/events/");
                         userProfileRef.once("value", function(e) {
                             e.forEach(function(w) {
+                                //id = String(id.substr(0,id.indexOf('#')));
+                                id = (id + "").split("#")[0];
                                 if (Number(w.val().id) === Number(id)) {
+                                    if (w.val().type === "course") {
+                                        scheduler.deleteEvent(id);
+                                    }
                                     userProfileRef.child(String(w.val().text)).remove();
+                                    
                                 }
                             })
                         })
@@ -132,8 +154,6 @@
                                     test = false;
                                 }
                             } 
-                            // if (test)
-                            //     filteredEvents.push(String(event.val().name));
                         }
                     });
                 });
@@ -144,7 +164,6 @@
                         filteredEvents.push(String(course.key + ": " + course.val().name));
                 });
             });
-            console.log(filteredEvents);
             globalAutoComplete = new autoComplete({
                 selector: '#search',
                 minChars: 1,
@@ -346,6 +365,8 @@
         let categories = [];
         let query = $('#search').val();
         let eventFound = false;
+        let eventID = 0;
+        let eventType = "event";
         catRef.once("value", function(s) {
             s.forEach(function(cat) {
                 if (cat.val().category !== undefined)
@@ -353,45 +374,67 @@
             });
             eventRef.once("value", function(p) {
                 function addCalendarEvent(event, type) {
+                    eventType = type;
                     let start = new Date(String(event.val().start_time.replace("T", ' ')));
                     let start_ = start.getDate() + "-" + String(parseInt(start.getMonth())+ 1) + "-" + start.getFullYear() + " " + start.getHours() + ":" + start.getMinutes() + ":" + start.getSeconds();
                     let end = new Date(String(event.val().end_time.replace("T", ' ')));
                     let end_ = end.getDate() + "-" + String(parseInt(end.getMonth())+ 1) + "-" + end.getFullYear() + " " + end.getHours()+ ":" + end.getMinutes() + ":" + end.getSeconds();
+                    let s_ = new Date(start.getFullYear(), start.getMonth(), start.getDate(), start.getHours(), start.getMinutes());
+                    let e_ = new Date(end.getFullYear(), end.getMonth(), end.getDate(), end.getHours(), end.getMinutes());
+                    let ev_length = Math.abs(end.getHours() - start.getHours()) + ":" + Math.abs(start.getMinutes() - end.getMinutes()) + ":" + Math.abs(start.getSeconds() - end.getSeconds());
+                    let a = ev_length.split(":");
+                    let len = (+a[0]) * 60 * 60 + (+a[1]) * 60 + (+a[2]);
+                    let rec = "week_1___";
                     if (type === "event") {
-                        let eventID = scheduler.addEvent({
+                         eventID = scheduler.addEvent({
                             start_date: start_,
                             end_date: end_,
                             text: String(event.val().name)
                         });
-                     } //else if (type === "course") {
-                    //     let days = {"MWF": "1,3,5", "MW": "1,3", "M": "1", "W": "3", "F": "5", "WF": "3,5"};
-                    //     let rec = "week_1___";
-                    //     for (k in days) {
-                    //         if (event.meeting_time === k) {
-                    //             rec += days[k];
-                    //         } 
-                    //     }
-                        // let eventID = scheduler.addEvent({
-                        //     start_date: "2018-03-03 10:00:00",
-                        //     end_date: "2018-03-10 11:00:00",
-                        //     text: "words",
-                        //     details: "",
-                        //     rec_type: "week_1___1,2",
-                        // });
-                    // }
-
+                     } else if (type === "course") {
+                        let days = {"MWF": "1,3,5", "TuTh": "2,4", "MW": "1,3", "M": "1", "W": "3", "F": "5", "WF": "3,5"};
+                        for (k in days) {
+                            if (event.val().meeting_time === k) {
+                                rec += days[k];
+                            } 
+                        }
+                        eventID = scheduler.addEvent({
+                            start_date: s_,
+                            end_date: e_,
+                            text: event.val().name,
+                            details: "",
+                            rec_type: rec,
+                            event_pid: 0,
+                            event_length: len
+                        });
+                    }
                     firebase.auth().onAuthStateChanged(function(user) {
                         if (user) {
                             firebase.database().ref('users/' + user.uid).once('value').then(function (snapshot) {
-                                let e_ = {};
-                                e_[String(event.val().name)] = {
-                                    start_date: start_,
-                                    end_date: end_,
-                                    text: String(event.val().name),
-                                    id: eventID
-                                };
+                                let ee_ = {};
+                                if (eventType === "event") {
+                                    ee_[String(event.val().name)] = {
+                                        start_date: start_,
+                                        end_date: end_,
+                                        text: String(event.val().name),
+                                        id: eventID,
+                                        type: eventType,
+                                    };
+                                } else if (eventType === "course") {
+                                    ee_[String(event.val().name)] = {
+                                        start_date: s_,
+                                        end_date: e_,
+                                        text: String(event.val().name),
+                                        details: "",
+                                        id: eventID,
+                                        rec_type: rec,
+                                        type: eventType,
+                                        event_length: len,
+                                        event_pid: 0
+                                    };
+                                }
                                 let userProfileRef = firebase.database().ref('users/' + user.uid + "/events");
-                                userProfileRef.update(e_);
+                                userProfileRef.update(ee_);
                             });
                         }
                     });
@@ -530,7 +573,6 @@
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
               user = firebase.auth().currentUser.uid;
-              console.log("Loading database contents for user: " + user );
             }
           });
         let eventCount = 0;
