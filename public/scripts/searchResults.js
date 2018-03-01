@@ -21,6 +21,20 @@
         scheduler.setCurrentView(today);
     };
 
+    $('#search').keypress(function (e){
+        console.log(e.keyCode);
+        if(e.keyCode == 13 ) {
+            $('#submit').click();
+            console.log("we")
+        }
+      });
+
+      $("#search").keyup(function(event) {
+          console.log(event.keyCode);
+        if (event.keyCode === 13) {
+            $("#submit").click();
+        }
+    });
 
     function loadUserEvents() {
         scheduler.attachEvent("onSchedulerReady", function(){
@@ -167,6 +181,11 @@
             globalAutoComplete = new autoComplete({
                 selector: '#search',
                 minChars: 1,
+                function: $("#search").keyup(function(event) {
+                    if (event.keyCode === 13) {
+                        $("#submit").click();
+                    }
+                }),
                 source: function(term, suggest){
                     term = term.toLowerCase();
                     var choices = filteredEvents;

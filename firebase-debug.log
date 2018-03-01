@@ -1,0 +1,41 @@
+[debug] [2018-03-01T00:52:26.290Z] ----------------------------------------------------------------------
+[debug] [2018-03-01T00:52:26.292Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve --only functions,hosting
+[debug] [2018-03-01T00:52:26.293Z] CLI Version:   3.17.4
+[debug] [2018-03-01T00:52:26.293Z] Platform:      darwin
+[debug] [2018-03-01T00:52:26.293Z] Node Version:  v6.11.3
+[debug] [2018-03-01T00:52:26.293Z] Time:          Wed Feb 28 2018 16:52:26 GMT-0800 (PST)
+[debug] [2018-03-01T00:52:26.293Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-03-01T00:52:26.307Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-03-01T00:52:26.308Z] > authorizing via signed-in user
+[debug] [2018-03-01T00:52:26.309Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2018-03-01T00:52:26.310Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ { refresh_token: '1/31MaLeJXouydeLAn8E2MYHXFeyqeTT3mLri8voIkuyc',
+  client_id: '563584335869-fgrhgmd47bqnekij5i8b5pr03ho849e6.apps.googleusercontent.com',
+  client_secret: 'j9iVZfS8kkCEFUPaAeJV0sAi',
+  grant_type: 'refresh_token',
+  scope: 'email https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/cloudplatformprojects.readonly https://www.googleapis.com/auth/firebase openid' } 
+ Wed Feb 28 2018 16:52:26 GMT-0800 (PST)
+[debug] [2018-03-01T00:52:27.620Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-01T00:52:27.627Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/savvy-aa31e  
+  
+ Wed Feb 28 2018 16:52:27 GMT-0800 (PST)
+[debug] [2018-03-01T00:52:28.541Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-01T00:52:28.541Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/database/savvy-aa31e/tokens  
+  
+ Wed Feb 28 2018 16:52:28 GMT-0800 (PST)
+[debug] [2018-03-01T00:52:29.007Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/aeivazia/Desktop/savvy'...
+[info] 
+[debug] [2018-03-01T00:52:29.012Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/savvy-aa31e  
+  
+ Wed Feb 28 2018 16:52:29 GMT-0800 (PST)
+[debug] [2018-03-01T00:52:29.403Z] <<< HTTP RESPONSE 200
+[debug] [2018-03-01T00:52:29.403Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/66499803255/clients/_:getWebAppConfig  
+  
+ Wed Feb 28 2018 16:52:29 GMT-0800 (PST)
+[debug] [2018-03-01T00:52:31.028Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] ✔  hosting: Local server: http://localhost:5000
+
