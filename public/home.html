@@ -37,6 +37,43 @@
 <style type="text/css" >
 	html, body{ margin:0px; padding:0px; height:100%; overflow:hidden;}	
 	.menu{ display: block;margin-top: 20px;margin-bottom: 10px;}
+	.exploreNav {
+	    height: 100%;
+	    width: 0;
+	    position: fixed;
+	    z-index: 1;
+	    margin-top: -43px;
+	    right: 0;
+	    background-color: #5bc0de;
+	    border-radius: 10px;
+	    overflow-x: hidden;
+	    transition: 0.5s;
+	}
+
+	table tr {
+		height: 50px;
+	}
+
+	.navbar-collapse.collapse {
+	  display: block!important;
+	}
+
+	.navbar-nav>li, .navbar-nav {
+	  float: left !important;
+	}
+
+	.navbar-nav.navbar-right:last-child {
+	  margin-right: -15px !important;
+	}
+
+	.navbar-right {
+	  float: right!important;
+	}
+
+	.clostbtn {
+		font-size: 25px;
+		margin-right: 15px;
+	}
 </style>
 
 <body onload="init();">
@@ -47,11 +84,29 @@
 		<div class="container-fluid">
 		<span class="menu">
 			<button type="button" id="sign-out" class="btn btn-danger pull-left" onclick="signOut();"> Sign Out </button>
-			<button type="button" id="explore" class="btn btn-info pull-right">
+			<button type="button" id="explore" class="btn btn-info pull-right" onclick="openExplore()">
 				<span class="glyphicon glyphicon-menu-hamburger"></span> Explore 
 			</button>
 			<button type="button" id="show_categories" class="btn btn-primary" data-toggle="modal" data-target="#categoriesModal">Show Categories</button>
 			<button type="button" id="userPref" class="btn btn-primary" data-toggle="modal" data-target="#preferencesModal">Preferences</button>
+			<!-- Explore Tab -->
+			<div id="exploreTab" class="exploreNav">
+				<nav class="navbar fixed-top navbar-default">
+				  <div class="container-fluid">
+				    <ul class="nav navbar-nav">
+				      <li id="recommendations" class="active"><a href="#" onclick="openRecommendations()">Recommendations</a></li>
+				      <li id="thisweek"><a href="#" onclick="openThisWeek()">This Week</a></li>
+				      <li id="allevents"><a href="#" onclick="openAllEvents()">All Events</a></li>
+				    </ul>
+				    <ul class="nav navbar-nav navbar-right">
+				      <li><a href="#" class="clostbtn" onclick="closeExplore()">&times;</a></li>
+				    </ul>
+				  </div>
+				</nav>
+				<div id="scrollNav" class="container-fluid">
+					<!-- Events go here -->
+				</div>
+			</div>
 			<!-- Modal -->
 			<div class="modal fade" id="categoriesModal" tabindex="-1" role="dialog" aria-labelledby="categoriesModal" aria-hidden="true">
 					<div class="modal-dialog" role="document">
@@ -196,6 +251,58 @@
 			firebase.auth().signOut().then(function(error) {
 				window.location.href = "index.html";
 			});	
+		}
+	}
+	function openExplore() {
+		document.getElementById("exploreTab").style.width = "500px";
+		openRecommendations();
+
+	}
+	function closeExplore() {
+		document.getElementById("exploreTab").style.width = "0";
+	}
+	function openRecommendations() {
+		document.getElementById("recommendations").className = "active";
+		document.getElementById("thisweek").className = "";
+		document.getElementById("allevents").className = "";
+		clearTable();
+		createTable(10);
+	}
+	function openThisWeek() {
+		document.getElementById("thisweek").className = "active";
+		document.getElementById("recommendations").className = "";
+		document.getElementById("allevents").className = "";
+		clearTable()
+		createTable(30);
+	}
+	function openAllEvents() {
+		document.getElementById("allevents").className = "active";
+		document.getElementById("recommendations").className = "";
+		document.getElementById("thisweek").className = "";
+		clearTable()
+		createTable(50);
+	}
+	function createTable(numberOfEvents) {
+		var table = document.createElement('table');
+		table.className="table table-bordered table-hover";
+		table.id = "eventTable";
+
+		for(var i = 0; i < numberOfEvents; i++) {
+			var tbody = document.createElement('tbody');
+			var tr = document.createElement('tr');
+			var td = document.createElement('td');
+			var text = document.createTextNode("Hello");
+			td.appendChild(text);
+			tr.appendChild(td);
+			tbody.appendChild(tr);
+			table.appendChild(tbody);
+		}
+		document.getElementById("scrollNav").appendChild(table);
+	}
+	function clearTable() {
+		var parent = document.getElementById("scrollNav");
+		while (parent.hasChildNodes()) {
+			parent.removeChild(parent.lastChild);
 		}
 	}
 </script>
