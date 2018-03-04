@@ -38,7 +38,7 @@
 	html, body{ margin:0px; padding:0px; height:100%; overflow:hidden;}	
 	.menu{ display: block;margin-top: 20px;margin-bottom: 10px;}
 	.exploreNav {
-	    height: 100%;
+	    height: 87%;
 	    width: 0;
 	    position: fixed;
 	    z-index: 1;
@@ -73,6 +73,18 @@
 	.clostbtn {
 		font-size: 25px;
 		margin-right: 15px;
+	}
+
+	@media screen and (max-height: 865px) {
+		.exploreNav {
+			height: 85%;
+		}
+	}
+
+	@media screen and (max-height: 700px) {
+		.exploreNav {
+			height: 80%;
+		}
 	}
 </style>
 
