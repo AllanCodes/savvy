@@ -41,7 +41,7 @@
 	    height: 87%;
 	    width: 0;
 	    position: fixed;
-	    z-index: 1;
+	    z-index: 5;
 	    margin-top: -43px;
 	    right: 0;
 	    background-color: #5bc0de;
@@ -265,58 +265,58 @@
 			});	
 		}
 	}
-	function openExplore() {
-		document.getElementById("exploreTab").style.width = "500px";
-		openRecommendations();
+	// function openExplore() {
+	// 	document.getElementById("exploreTab").style.width = "500px";
+	// 	openRecommendations();
 
-	}
-	function closeExplore() {
-		document.getElementById("exploreTab").style.width = "0";
-	}
-	function openRecommendations() {
-		document.getElementById("recommendations").className = "active";
-		document.getElementById("thisweek").className = "";
-		document.getElementById("allevents").className = "";
-		clearTable();
-		createTable(10);
-	}
-	function openThisWeek() {
-		document.getElementById("thisweek").className = "active";
-		document.getElementById("recommendations").className = "";
-		document.getElementById("allevents").className = "";
-		clearTable()
-		createTable(30);
-	}
-	function openAllEvents() {
-		document.getElementById("allevents").className = "active";
-		document.getElementById("recommendations").className = "";
-		document.getElementById("thisweek").className = "";
-		clearTable()
-		createTable(50);
-	}
-	function createTable(numberOfEvents) {
-		var table = document.createElement('table');
-		table.className="table table-bordered table-hover";
-		table.id = "eventTable";
+	// }
+	// function closeExplore() {
+	// 	document.getElementById("exploreTab").style.width = "0";
+	// }
+	// function openRecommendations() {
+	// 	document.getElementById("recommendations").className = "active";
+	// 	document.getElementById("thisweek").className = "";
+	// 	document.getElementById("allevents").className = "";
+	// 	clearTable();
+	// 	createTable(10);
+	// }
+	// function openThisWeek() {
+	// 	document.getElementById("thisweek").className = "active";
+	// 	document.getElementById("recommendations").className = "";
+	// 	document.getElementById("allevents").className = "";
+	// 	clearTable()
+	// 	createTable(30);
+	// }
+	// function openAllEvents() {
+	// 	document.getElementById("allevents").className = "active";
+	// 	document.getElementById("recommendations").className = "";
+	// 	document.getElementById("thisweek").className = "";
+	// 	clearTable()
+	// 	createTable(50);
+	// }
+	// function createTable(numberOfEvents) {
+	// 	var table = document.createElement('table');
+	// 	table.className="table table-bordered table-hover";
+	// 	table.id = "eventTable";
 
-		for(var i = 0; i < numberOfEvents; i++) {
-			var tbody = document.createElement('tbody');
-			var tr = document.createElement('tr');
-			var td = document.createElement('td');
-			var text = document.createTextNode("Hello");
-			td.appendChild(text);
-			tr.appendChild(td);
-			tbody.appendChild(tr);
-			table.appendChild(tbody);
-		}
-		document.getElementById("scrollNav").appendChild(table);
-	}
-	function clearTable() {
-		var parent = document.getElementById("scrollNav");
-		while (parent.hasChildNodes()) {
-			parent.removeChild(parent.lastChild);
-		}
-	}
+	// 	for(var i = 0; i < numberOfEvents; i++) {
+	// 		var tbody = document.createElement('tbody');
+	// 		var tr = document.createElement('tr');
+	// 		var td = document.createElement('td');
+	// 		var text = document.createTextNode("Hello");
+	// 		td.appendChild(text);
+	// 		tr.appendChild(td);
+	// 		tbody.appendChild(tr);
+	// 		table.appendChild(tbody);
+	// 	}
+	// 	document.getElementById("scrollNav").appendChild(table);
+	// }
+	// function clearTable() {
+	// 	var parent = document.getElementById("scrollNav");
+	// 	while (parent.hasChildNodes()) {
+	// 		parent.removeChild(parent.lastChild);
+	// 	}
+	// }
 </script>
 <script src="/scripts/auto-complete/auto-complete.min.js"></script>
 </html>

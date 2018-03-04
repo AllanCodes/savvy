@@ -602,3 +602,66 @@
         query = $('#search').val(); //current search string
         
     }
+
+    global.signOut = function() {
+		var user = firebase.auth().currentUser;
+		if (user != null) {
+			firebase.auth().signOut().then(function(error) {
+				window.location.href = "index.html";
+			});	
+		}
+    }
+    
+	global.openExplore = function() {
+		document.getElementById("exploreTab").style.width = "500px";
+		openRecommendations();
+
+	}
+	global.closeExplore = function() {
+        document.getElementById("exploreTab").style.width = "0";
+        clearTable();
+	}
+    global.openRecommendations = function() {
+		document.getElementById("recommendations").className = "active";
+		document.getElementById("thisweek").className = "";
+		document.getElementById("allevents").className = "";
+		clearTable();
+		createTable(5);
+	}
+	global.openThisWeek = function() {
+		document.getElementById("thisweek").className = "active";
+		document.getElementById("recommendations").className = "";
+		document.getElementById("allevents").className = "";
+		clearTable()
+		createTable(5);
+	}
+	global.openAllEvents = function() {
+		document.getElementById("allevents").className = "active";
+		document.getElementById("recommendations").className = "";
+		document.getElementById("thisweek").className = "";
+		clearTable()
+		createTable(5);
+	}
+	global.createTable = function(numberOfEvents) {
+		var table = document.createElement('table');
+		table.className="table table-bordered table-hover";
+		table.id = "eventTable";
+
+		for(var i = 0; i < numberOfEvents; i++) {
+			var tbody = document.createElement('tbody');
+			var tr = document.createElement('tr');
+			var td = document.createElement('td');
+			var text = document.createTextNode("Hello");
+			td.appendChild(text);
+			tr.appendChild(td);
+			tbody.appendChild(tr);
+			table.appendChild(tbody);
+		}
+		document.getElementById("scrollNav").appendChild(table);
+	}
+	global.clearTable = function() {
+		var parent = document.getElementById("scrollNav");
+		while (parent.hasChildNodes()) {
+			parent.removeChild(parent.lastChild);
+		}
+	}
