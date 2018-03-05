@@ -107,7 +107,7 @@
 				  <div class="container-fluid">
 				    <ul class="nav navbar-nav">
 				      <li id="recommendations" class="active"><a href="#" onclick="openRecommendations()">Recommendations</a></li>
-				      <li id="thisweek"><a href="#" onclick="openThisWeek()">This Week</a></li>
+				      <li id="currentEvents"><a href="#" onclick="openCurrentEvents()">Your Events</a></li>
 				      <li id="allevents"><a href="#" onclick="openAllEvents()">All Events</a></li>
 				    </ul>
 				    <ul class="nav navbar-nav navbar-right">
@@ -256,7 +256,7 @@
 	window.onload(loadData());
 	createCheckBox();
 	loadUserCategories();
-
+	
 	function signOut() {
 		var user = firebase.auth().currentUser;
 		if (user != null) {
@@ -265,58 +265,6 @@
 			});	
 		}
 	}
-	// function openExplore() {
-	// 	document.getElementById("exploreTab").style.width = "500px";
-	// 	openRecommendations();
-
-	// }
-	// function closeExplore() {
-	// 	document.getElementById("exploreTab").style.width = "0";
-	// }
-	// function openRecommendations() {
-	// 	document.getElementById("recommendations").className = "active";
-	// 	document.getElementById("thisweek").className = "";
-	// 	document.getElementById("allevents").className = "";
-	// 	clearTable();
-	// 	createTable(10);
-	// }
-	// function openThisWeek() {
-	// 	document.getElementById("thisweek").className = "active";
-	// 	document.getElementById("recommendations").className = "";
-	// 	document.getElementById("allevents").className = "";
-	// 	clearTable()
-	// 	createTable(30);
-	// }
-	// function openAllEvents() {
-	// 	document.getElementById("allevents").className = "active";
-	// 	document.getElementById("recommendations").className = "";
-	// 	document.getElementById("thisweek").className = "";
-	// 	clearTable()
-	// 	createTable(50);
-	// }
-	// function createTable(numberOfEvents) {
-	// 	var table = document.createElement('table');
-	// 	table.className="table table-bordered table-hover";
-	// 	table.id = "eventTable";
-
-	// 	for(var i = 0; i < numberOfEvents; i++) {
-	// 		var tbody = document.createElement('tbody');
-	// 		var tr = document.createElement('tr');
-	// 		var td = document.createElement('td');
-	// 		var text = document.createTextNode("Hello");
-	// 		td.appendChild(text);
-	// 		tr.appendChild(td);
-	// 		tbody.appendChild(tr);
-	// 		table.appendChild(tbody);
-	// 	}
-	// 	document.getElementById("scrollNav").appendChild(table);
-	// }
-	// function clearTable() {
-	// 	var parent = document.getElementById("scrollNav");
-	// 	while (parent.hasChildNodes()) {
-	// 		parent.removeChild(parent.lastChild);
-	// 	}
-	// }
 </script>
 <script src="/scripts/auto-complete/auto-complete.min.js"></script>
 </html>

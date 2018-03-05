@@ -20,21 +20,22 @@
         handleEventDeleted();
         scheduler.setCurrentView(today);
     };
-
-    $('#search').keypress(function (e){
-        console.log(e.keyCode);
-        if(e.keyCode == 13 ) {
-            $('#submit').click();
-            console.log("we")
-        }
-      });
-
-      $("#search").keyup(function(event) {
-          console.log(event.keyCode);
-        if (event.keyCode === 13) {
-            $("#submit").click();
-        }
-    });
+    
+    
+    global.currentEvents = function () {
+        firebase.auth().onAuthStateChanged(function (user) {
+            let currEvents = [];
+            if (user) {
+                let userEventsRef = firebase.database().ref('users/' + user.uid + "/events/");
+                userEventsRef.once("value", function(events) {
+                    events.forEach(function (e) {
+                        currEvents.push(e.val());
+                        createTable(e.val(), false, true);
+                    });
+                });
+            }
+        });
+    }
 
     function loadUserEvents() {
         scheduler.attachEvent("onSchedulerReady", function(){
@@ -544,9 +545,6 @@
             eventFound = false;
         }   
 
-    global.loadPreferences = function() {
-
-    }
     /**
      * create category check boxes in "show categories"
      */
@@ -566,10 +564,6 @@
                 $('#mbody').append("<input type=\"checkbox\" name=\"chbox" + String(idx) + "\" checked=\"true\">");
                 $("[name='chbox" + String(idx) + "']").bootstrapSwitch();
             });
-                // $('#mbody').append("<h2 class=\"h4\">" + "UCI Courses" + "</h2>");
-                // $('#mbody').append("<input type=\"checkbox\" name=\"chbox" + String(count) + "\" checked=\"true\">");
-                // $("[name='chbox" + String(count) + "']").bootstrapSwitch();
-                // count++;
                 $('#prefmodalbody').append("<h2 class=\"h4\">" + "UCI Courses" + "</h2>");
                 $('#prefmodalbody').append("<input type=\"checkbox\" name=\"chbox" + String(count) + "\" checked=\"true\">");
                 $("[name='chbox" + String(count) + "']").bootstrapSwitch();
@@ -613,8 +607,8 @@
     }
     
 	global.openExplore = function() {
-		document.getElementById("exploreTab").style.width = "500px";
-		openRecommendations();
+        document.getElementById("exploreTab").style.width = "500px";
+        openRecommendations();
 
 	}
 	global.closeExplore = function() {
@@ -622,43 +616,85 @@
         clearTable();
 	}
     global.openRecommendations = function() {
+        this.clearTable();
 		document.getElementById("recommendations").className = "active";
-		document.getElementById("thisweek").className = "";
+		document.getElementById("currentEvents").className = "";
 		document.getElementById("allevents").className = "";
-		clearTable();
-		createTable(5);
+
 	}
-	global.openThisWeek = function() {
-		document.getElementById("thisweek").className = "active";
+	global.openCurrentEvents = function() {
+        this.clearTable();
+        this.currentEvents();
+		document.getElementById("currentEvents").className = "active";
 		document.getElementById("recommendations").className = "";
 		document.getElementById("allevents").className = "";
-		clearTable()
-		createTable(5);
 	}
 	global.openAllEvents = function() {
+        clearTable();
 		document.getElementById("allevents").className = "active";
 		document.getElementById("recommendations").className = "";
-		document.getElementById("thisweek").className = "";
-		clearTable()
-		createTable(5);
-	}
-	global.createTable = function(numberOfEvents) {
+        document.getElementById("currentEvents").className = "";
+        let e_ = []
+        let eventRef = firebase.database().ref("/events");
+        let catRef = firebase.database().ref("/categories");
+        let categories = [];
+        catRef.once("value", function(s) {
+            s.forEach(function(cat) {
+                if (cat.val().category !== undefined)
+                    categories.push(cat.val().category);
+            });
+            eventRef.once("value", function(p) {
+                categories.forEach(function(c, idx) {
+                    p.child(c).forEach(function(event, idx) {
+                        if (!Number.isInteger(event.val()) && event.val() !== undefined && event.val().name !== undefined) {
+                            e_.push(event.val());
+                        }
+                    });
+                });
+                createTable(e_, true, false);
+            });
+        });
+    }
+
+	global.createTable = function(events, ae, obj ) {
 		var table = document.createElement('table');
 		table.className="table table-bordered table-hover";
 		table.id = "eventTable";
 
-		for(var i = 0; i < numberOfEvents; i++) {
-			var tbody = document.createElement('tbody');
-			var tr = document.createElement('tr');
-			var td = document.createElement('td');
-			var text = document.createTextNode("Hello");
-			td.appendChild(text);
-			tr.appendChild(td);
-			tbody.appendChild(tr);
-			table.appendChild(tbody);
-		}
+        if (obj) {
+                var tbody = document.createElement('tbody');
+                var tr = document.createElement('tr');
+                var td = document.createElement('td');
+                let text = "";
+                if (ae === true) {
+                    text = document.createTextNode(events.name);
+                }
+                else 
+                    text = document.createTextNode(events.text);
+                td.appendChild(text);
+                tr.appendChild(td);
+                tbody.appendChild(tr);
+                table.appendChild(tbody);
+        } else {
+            for ( let i = 0; i < events.length; i++ ) {
+                var tbody = document.createElement('tbody');
+                var tr = document.createElement('tr');
+                var td = document.createElement('td');
+                let text = "";
+                if (ae === true) {
+                    text = document.createTextNode(events[i].name);
+                }
+                else 
+                    text = document.createTextNode(events[i].text);
+                td.appendChild(text);
+                tr.appendChild(td);
+                tbody.appendChild(tr);
+                table.appendChild(tbody);
+            }
+        }
 		document.getElementById("scrollNav").appendChild(table);
-	}
+    }
+    
 	global.clearTable = function() {
 		var parent = document.getElementById("scrollNav");
 		while (parent.hasChildNodes()) {
