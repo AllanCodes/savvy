@@ -21,7 +21,8 @@
         scheduler.setCurrentView(today);
     };
     
-    
+
+
     global.currentEvents = function () {
         firebase.auth().onAuthStateChanged(function (user) {
             let currEvents = [];
@@ -118,6 +119,55 @@
 
         });
     }
+
+    global.grabRecommendations = function () {
+        firebase.auth().onAuthStateChanged(function (user) {
+            let currEvents = [];
+            let eventsRef = firebase.database().ref('events/');
+            let categoriesRef = firebase.database().ref('categories/');
+            let courseref = firebase.database().ref("/courses/UCI Courses/Terms/Winter 2018/Department/Computer Science");
+            let categories_ = [];
+            let recommendations = [];
+            if (user) {
+                let userEventsRef = firebase.database().ref('users/' + user.uid + "/events/");
+                userEventsRef.once("value", function(events) {
+                    events.forEach(function (e) {
+                        currEvents.push(e.val());
+                    });
+                    categoriesRef.once("value", function(cats) {
+                        cats.forEach(function(o) {
+                            if (o.val().category !== undefined)
+                                categories_.push(o.val().category);
+                        });
+                        currEvents.forEach(function(currentEvent) {
+                        if (currentEvent.type === "event") {
+                            let words = currentEvent.text.split(" ");
+                            let actual_words = [];
+                            let ignore = ["the","or","it","and","them","that","this"];
+                            words.forEach(function(a) {if (ignore.indexOf(a) === -1) actual_words.push(a);});
+                            eventsRef.once("value", function(s) {
+                                categories_.forEach(function(c) {
+                                    s.child(c).forEach(function(event) {
+                                        let found = false;
+                                        if (event.val().name === undefined) return;
+                                        actual_words.forEach(function(u, idx) {
+                                            if (event.val().name.indexOf(u) !== -1 && !found) {
+                                                found = true;
+                                                recommendations.push(event.val());
+                                                idx = actual_words.length;
+                                                createTable(event.val(), true, true);
+                                            }
+                                        });
+                                    });
+                                });
+                            });
+                        }
+                    });
+                    })
+                });
+            }
+        });
+    };
 
     /**
      * Grab current state of all categories in "show categories" and load event data based on selected categories
@@ -617,7 +667,8 @@
 	}
     global.openRecommendations = function() {
         this.clearTable();
-		document.getElementById("recommendations").className = "active";
+        document.getElementById("recommendations").className = "active";
+        this.grabRecommendations();
 		document.getElementById("currentEvents").className = "";
 		document.getElementById("allevents").className = "";
 
@@ -656,25 +707,24 @@
         });
     }
 
-	global.createTable = function(events, ae, obj ) {
+	global.createTable = function(events, ae, obj) {
 		var table = document.createElement('table');
 		table.className="table table-bordered table-hover";
 		table.id = "eventTable";
-
         if (obj) {
-                var tbody = document.createElement('tbody');
-                var tr = document.createElement('tr');
-                var td = document.createElement('td');
-                let text = "";
-                if (ae === true) {
-                    text = document.createTextNode(events.name);
-                }
-                else 
-                    text = document.createTextNode(events.text);
-                td.appendChild(text);
-                tr.appendChild(td);
-                tbody.appendChild(tr);
-                table.appendChild(tbody);
+            var tbody = document.createElement('tbody');
+            var tr = document.createElement('tr');
+            var td = document.createElement('td');
+            let text = "";
+            if (ae === true) {
+                text = document.createTextNode(events.name);
+            }
+            else 
+                text = document.createTextNode(events.text);
+            td.appendChild(text);
+            tr.appendChild(td);
+            tbody.appendChild(tr);
+            table.appendChild(tbody);
         } else {
             for ( let i = 0; i < events.length; i++ ) {
                 var tbody = document.createElement('tbody');
